@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">CropZ</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_confirm_password">Confirm Password</string>
+
+
+    <string name="login_btn_lbl">Login</string>
+    <string name="register_btn_lbl">Sign Up</string>
+    <string name="update_garden_btn_lbl">Update Garden</string>
+
+
+    <string name="signup_text">New? Signup here! </string>
+    <string name="prompt_name">Name</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="add_new_garden_item_string">Add new Garden</string>
+    <string name="title_activity_add_garden">AddGardenActivity</string>
+
+
+    <string name="garden_name">Garden Name</string>
+    <string name="enter_garden_string">Enter Garden Name</string>
+    <string name="time_and_date_string">Time and Date</string>
+    <string name="no_date_set_string">0000-00-00</string>
+    <string name="no_time_set_string">00:00:00</string>
+    <string name="choose_date_string">Choose Date</string>
+    <string name="choose_time_string">Choose Time</string>
+    <string name="cancel_string">Cancel</string>
+    <string name="reset_string">Reset</string>
+    <string name="submit_string">Submit</string>
+
+
+</resources>

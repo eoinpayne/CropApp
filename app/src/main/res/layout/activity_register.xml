@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPrimary"
+    tools:context="com.eoinpayne.crop.cropapp.RegisterActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textColor="@color/textColor"
+        android:textSize="30dp"
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        android:textStyle="bold"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        >
+
+        <!-- register name field -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/prompt_name"
+            android:textColor="@color/textColor"
+            android:textSize="18dp"
+            android:id="@+id/tx1"
+            android:layout_alignParentLeft="true"
+
+            />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tx1"
+            android:id="@+id/registration_name"
+            android:textColor="@color/textColor"
+            />
+
+        <!-- register email field -->
+        <TextView
+            android:layout_marginTop="30dp"
+            android:layout_below="@+id/registration_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/prompt_email"
+            android:textColor="@color/textColor"
+            android:textSize="18dp"
+            android:id="@+id/tx2"
+            android:layout_alignParentLeft="true"
+
+            />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tx2"
+            android:id="@+id/registration_email"
+            android:textColor="@color/textColor"
+            android:inputType="textEmailAddress"
+            />
+
+
+        <!-- register password field -->
+        <TextView
+            android:layout_marginTop="30dp"
+            android:layout_below="@+id/registration_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/prompt_password"
+            android:textColor="@color/textColor"
+            android:textSize="18dp"
+            android:id="@+id/tx3"
+            android:layout_alignParentLeft="true"
+
+            />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tx3"
+            android:id="@+id/registration_password"
+            android:textColor="@color/textColor"
+            android:inputType="textPassword"
+            />
+
+        <!-- confirm password field -->
+        <TextView
+            android:layout_marginTop="30dp"
+            android:layout_below="@+id/registration_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/prompt_confirm_password"
+            android:textColor="@color/textColor"
+            android:textSize="18dp"
+            android:id="@+id/tx4"
+            android:layout_alignParentLeft="true"
+
+            />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tx4"
+            android:id="@+id/registration_confirm_password"
+            android:textColor="@color/textColor"
+            android:inputType="textPassword"
+            />
+
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/register_btn_lbl"
+            android:textStyle="bold"
+            style="?android:textAppearanceSmall"
+            android:layout_below="@id/registration_confirm_password"
+            android:layout_marginTop="25dp"
+            android:id="@+id/register_btn"
+            android:background="@drawable/btn_selecter"
+            android:textColor="@color/textColor"
+            />
+
+
+
+    </RelativeLayout>
+
+</LinearLayout>
