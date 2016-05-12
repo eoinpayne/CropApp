@@ -10,7 +10,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +33,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
@@ -44,21 +47,34 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
     //define variables
 //    String register_url = "http://192.168.0.34/register.php";
 //    String login_url = "http://192.168.0.34/login.php";
+
+//    String register_url = "http://147.252.139.83/register.php";
+//    String login_url = "http://147.252.139.83/login.php";
+//    String createGarden_URL = "http://147.252.139.83/createGarden.php";
+//    String displayGarden_URL = "http://147.252.139.83/displayGardens.php";
+
     String createGarden_URL = "http://10.0.2.2/createGarden.php";
     String displayGarden_URL = "http://10.0.2.2/displayGardens.php";
     String register_url = "http://10.0.2.2/register.php"; //make global
     String login_url = "http://10.0.2.2/login.php";
+
     Context ctx;
     Activity activity;
     AlertDialog.Builder builder;  //we can initialise in onPreExecute method
     ProgressDialog progressDialog;
+    ArrayAdapter<String> adapter;
+    public ArrayList<String> json_gardens= new ArrayList<>();
+    ListView gardenListView;
     //TextView textView;
+
+    HomeActivity.HomeBackgroundTask homeBackgroundTask;
 
     //define contructor for class ... we will pass context in from RegisterActivity
     public BackgroundTask(Context ctx){
         //initialise variables
         this.ctx = ctx;
         activity = (Activity)ctx; //cast conext to activity
+
     }
     //implement life cycle methods
     @Override
@@ -70,6 +86,9 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(false);
         progressDialog.show();
+        adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, json_gardens);
+
+
     }
 
     @Override
@@ -107,7 +126,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
                 }
                 //create a pause between background methods
                 httpURLConnection.disconnect(); //close conenction
-                Thread.sleep(500);
+                Thread.sleep(2500);
 //                Log.i();
                 return stringBuilder.toString().trim(); //return string builder in normal string format
 
@@ -153,7 +172,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
                 }
                 //create a pause between background methods
                 httpURLConnection.disconnect(); //close conenction
-                Thread.sleep(500);
+                Thread.sleep(2500);
 //                Log.i();
                 return stringBuilder.toString().trim(); //return string builder in normal string format
 
@@ -198,7 +217,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
                 }
                 //create a pause between background methods
                 httpURLConnection.disconnect(); //close connection
-                Thread.sleep(500);
+                Thread.sleep(5500);
 //                Log.i();
                 return stringBuilder.toString().trim(); //return string builder in normal string format
 
@@ -223,7 +242,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
                 HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
                 httpURLConnection.setRequestMethod("POST"); //?
                 httpURLConnection.setDoInput(true);
-//                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoOutput(true);
                 OutputStream outputStream = httpURLConnection.getOutputStream();
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
                 String userID, gardenName;
@@ -246,7 +265,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
                     stringBuilder.append(line+"\n");
                 }
                 httpURLConnection.disconnect(); //close connection
-                Thread.sleep(500);
+                Thread.sleep(2500);
 //                Log.i();
                 return stringBuilder.toString().trim(); //return string builder in normal string format
 
@@ -288,6 +307,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
 //            Toast.makeText(this.activity,message, Toast.LENGTH_LONG).show();
             progressDialog.dismiss(); //to close progressDialog
 
+            /////////////    REGISTER     ///////////////////
             // call helper method which will display JSON messages in alert
             if (code.equals("reg_true")){
                 showDialog("Registration Success", message, code);
@@ -296,29 +316,33 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
                 showDialog("Registration Failed", message, code);
             }
 
-            //checking for login
+            /////////////    LOGIN     ///////////////////
             else if (code.equals("login_true")){
                 int userID = JO.getInt("userID");
-//                String str_userID = JO.getString("userID");
+                String userID_STR = JO.getString("userID");
+                HomeActivity.global_userID = userID;
+                String str_userID = JO.getString("userID");
                 Intent intent = new Intent(activity, HomeActivity.class);
                 Bundle extras = new Bundle();
                 extras.putString("message", message);
                 extras.putInt("userID", userID);
                 intent.putExtras(extras);
-
+//                homeBackgroundTask = new HomeActivity().new HomeBackgroundTask();
+//                homeBackgroundTask.execute("display_gardens", userID_STR);
                 activity.startActivity(intent);
             }
             else if (code.equals("login_false")){
                 showDialog("Login Error", message, code);
             }
 
-            //checking for display gardens
+            /////////////    Display Gardens     ///////////////////
             else if (code.equals("gardens_exist")){
                 TextView textView = (TextView) activity.findViewById(R.id.welcome_txt);
                 for (int i = 1; i < jsonArray.length(); i++) {
                     JSONObject thisJO = jsonArray.getJSONObject(i);
                     String tempGarden = "GardenID: " + thisJO.getString("gardenID") +  ".   Garden Name: " + thisJO.getString("gardenName");
-                    HomeActivity.json_gardens.add(tempGarden);  ///////*************
+//                    json_gardens.add(tempGarden);  ///////*************
+                    adapter.add(tempGarden);
 //                    for (Iterator<String> iter = JO.keys(); iter.hasNext(); ) {
 //                        String key = iter.next();
 //                        try {
@@ -337,7 +361,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
                 showDialog("Login Error", message, code);
             }
 
-            ////////CREATING GARDENS
+            /////////////    CREATE GARDEN     ///////////////////
             else if (code.equals("garden_created")){
                 showDialog("Garden Created!", message, code);
             }
@@ -351,7 +375,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        adapter.notifyDataSetChanged();
 
     } //close on post execute
 
@@ -369,8 +393,8 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
                     activity.finish();
                 }
             });
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
+//            AlertDialog alertDialog = builder.create();
+//            alertDialog.show();
         } //close if
         else if (code.equals("login_false")) { //if so we will show message
 
@@ -400,8 +424,8 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
 //                    activity.finish();
                 }
             });
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
+//            AlertDialog alertDialog = builder.create();
+//            alertDialog.show();
         }
 
         else if (code.equals("createGarden_fail") || code.equals("garden_exists")) {
@@ -414,8 +438,8 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
 //                    activity.finish();
                 }
             });
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
+//            AlertDialog alertDialog = builder.create();
+//            alertDialog.show();
         }
 
         else if (code.equals("garden_created")) {
@@ -429,8 +453,8 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
                     //launch activity here for entering in details etc
                 }
             });
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
+//            AlertDialog alertDialog = builder.create();
+//            alertDialog.show();
         }
 
         AlertDialog alertDialog = builder.create();

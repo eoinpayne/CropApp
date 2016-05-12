@@ -17,6 +17,7 @@ public class LoginActivity extends AppCompatActivity {
     Button login_btn;
     TextView signup_text;
     AlertDialog.Builder builder;
+    HomeActivity.HomeBackgroundTask homeBackgroundTask;
 
 
     @Override
@@ -75,6 +76,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //creating new intent for login activity and its target of RegisterActivity.class (go to regActivty,java)
+
+//                new HomeActivity.HomeBackgroundTask().execute("display_gardens", UserID_String);
                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
 
             }
