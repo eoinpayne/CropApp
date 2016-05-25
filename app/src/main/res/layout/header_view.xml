@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        >
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:gravity = "left"
+            android:id="@+id/updateButtonLayout"
+            android:weightSum="1.0">
+
+            <Button
+                android:id="@+id/plantVeg_btn"
+                android:layout_width="0dp"
+                android:layout_height="35sp"
+                android:text="Plant Veg"
+                android:textStyle="bold"
+                style="?android:textAppearanceSmall"
+                android:layout_weight=".6"
+
+
+
+                android:background="@color/colorPrimaryDark"
+                android:textColor="@color/textColor"
+                android:singleLine="false"
+                android:layout_marginRight="1dp" />
+
+            <Button
+                android:id="@+id/waterAll_btn"
+                android:layout_weight=".4"
+                android:layout_width="0dp"
+                android:layout_height="35sp"
+                android:text="Water Garden"
+                android:textStyle="bold"
+                style="?android:textAppearanceSmall"
+                android:background="#6397ba"
+                android:textColor="@color/textColor"
+
+                android:layout_marginLeft="1dp" />
+        </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+
+
+
+
+
+<!--<TextView xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--android:id="@+id/headerView"-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:gravity="center_horizontal"-->
+<!--android:text="@string/add_new_veg_item_string"-->
+<!--android:textSize="26sp"-->
+
+    <!--android:padding="5dp"-->
+    <!--android:background="@color/buttonColor"-->
+
+    <!--&gt;-->
+
+<!--</TextView>-->
+

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPrimary"
+    >
+
+    <!-- Title -->
+
+    <TextView
+        android:id="@+id/ChooseVegLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="@string/veg_string"
+        android:textAppearance="?android:attr/textAppearanceLarge" >
+    </TextView>
+
+    <Spinner
+        android:id="@+id/chooseVegSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+
+        android:layout_below="@+id/ChooseVegLabel"
+        android:layout_marginTop="14dp"
+        android:ems="10"
+        android:hint="@string/enter_veg_string"
+        android:inputType="textShortMessage">
+
+        <!--<requestFocus />-->
+    </Spinner>
+    <!--android:prompt="Choose Veg Below"-->
+    <TextView
+        android:id="@+id/QuantityLabel"
+        android:layout_below="@+id/chooseVegSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="Choose Quantity"
+        android:textAppearance="?android:attr/textAppearanceLarge" >
+    </TextView>
+
+
+    <Spinner
+        android:id="@+id/QuantitySpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/QuantityLabel"
+        android:layout_marginTop="14dp"
+        android:ems="10"
+        android:entries="@array/quantity_list">
+    </Spinner>
+
+
+
+    <TextView
+        android:id="@+id/time_and_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/QuantitySpinner"
+        android:layout_marginTop="25dp"
+        android:text="@string/time_and_date_string"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/time_and_date"
+        android:layout_marginTop="12dp"
+        android:text="@string/no_date_set_string" />
+
+
+    <Button
+        android:id="@+id/date_picker_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/date"
+        android:text="@string/choose_date_string"
+        style="?android:textAppearanceSmall"
+        android:textStyle="bold"
+        android:layout_marginLeft="5dp"
+        android:background="@drawable/btn_selecter"
+        android:textColor="@color/textColor"
+        />
+
+
+
+    <!-- Buttons -->
+
+    <Button
+        android:id="@+id/cancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="25dp"
+        android:text="@string/cancel_string"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        style="?android:textAppearanceSmall"
+        android:textStyle="bold"
+        android:background="@drawable/btn_selecter"
+        android:textColor="@color/textColor"
+        />
+
+    <Button
+        android:id="@+id/resetButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/reset_string"
+        style="?android:textAppearanceSmall"
+        android:textStyle="bold"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/btn_selecter"
+        android:textColor="@color/textColor"
+        />
+
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/submit_string"
+        style="?android:textAppearanceSmall"
+        android:textStyle="bold"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/btn_selecter"
+        android:textColor="@color/textColor"
+        />
+
+    <!--<CheckBox-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Affected by Rain?"-->
+        <!--android:id="@+id/rain_box"-->
+        <!--android:checked="true"-->
+        <!--android:layout_alignTop="@+id/time_and_date"-->
+        <!--android:layout_toRightOf="@+id/resetButton"-->
+        <!--android:layout_toEndOf="@+id/resetButton" />-->
+
+
+    <TextView
+        android:id="@+id/rain_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Affected by Rain?"
+        android:layout_above="@+id/date"
+        android:layout_alignRight="@+id/submitButton"
+        android:layout_alignEnd="@+id/submitButton" />
+
+    <RadioGroup
+        android:id="@+id/rainGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="15dp"
+
+        android:layout_below="@+id/rain_title"
+        android:layout_alignLeft="@+id/rain_title"
+        android:layout_alignStart="@+id/rain_title"
+        >
+
+            <RadioButton
+                android:id="@+id/rainYes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Yes"
+                android:layout_alignTop="@+id/rainNo"
+                android:layout_alignLeft="@+id/submitButton"
+                android:layout_alignStart="@+id/submitButton" />
+
+            <RadioButton
+                android:id="@+id/rainNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/resetButton"
+                android:layout_toEndOf="@+id/resetButton" />
+    </RadioGroup>
+</RelativeLayout>
