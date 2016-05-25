@@ -47,16 +47,12 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
     //define variables
 //    String register_url = "http://192.168.0.34/register.php";
 //    String login_url = "http://192.168.0.34/login.php";
-
 //    String register_url = "http://147.252.139.83/register.php";
 //    String login_url = "http://147.252.139.83/login.php";
-//    String createGarden_URL = "http://147.252.139.83/createGarden.php";
-//    String displayGarden_URL = "http://147.252.139.83/displayGardens.php";
-
-    String createGarden_URL = "http://10.0.2.2/createGarden.php";
-    String displayGarden_URL = "http://10.0.2.2/displayGardens.php";
     String register_url = "http://10.0.2.2/register.php"; //make global
     String login_url = "http://10.0.2.2/login.php";
+    String addVegItem_url = "http://10.0.2.2/addVeg.php";
+
 
     Context ctx;
     Activity activity;
@@ -65,7 +61,6 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
     ArrayAdapter<String> adapter;
     public ArrayList<String> json_gardens= new ArrayList<>();
     ListView gardenListView;
-    //TextView textView;
 
     HomeActivity.HomeBackgroundTask homeBackgroundTask;
 
@@ -87,8 +82,6 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
         progressDialog.setCancelable(false);
         progressDialog.show();
         adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, json_gardens);
-
-
     }
 
     @Override
@@ -126,7 +119,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
                 }
                 //create a pause between background methods
                 httpURLConnection.disconnect(); //close conenction
-                Thread.sleep(2500);
+                Thread.sleep(1200);
 //                Log.i();
                 return stringBuilder.toString().trim(); //return string builder in normal string format
 
@@ -141,8 +134,9 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
                 e.printStackTrace();
             }
         }
-//////////////////////////////////////LOGIN/////////////////////////////////////////////////////////
-        else if (method.equals("login")) //pass email and password to server, get a response. if positibe display ome acticvity, toherwise alert dialoge
+    ////////////////////////////LOGIN////////////////////////////////////////
+        //pass email and password to server, get a response. if positibe display ome acticvity, toherwise alert dialoge
+        else if (method.equals("login"))
         {
             try {
                 URL url = new URL(login_url);
@@ -172,7 +166,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
                 }
                 //create a pause between background methods
                 httpURLConnection.disconnect(); //close conenction
-                Thread.sleep(2500);
+                Thread.sleep(1200);
 //                Log.i();
                 return stringBuilder.toString().trim(); //return string builder in normal string format
 
@@ -189,72 +183,37 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
             }
         }   //close login else if
 
-            //////////////    Show Garden         ///////////////////////////////////////////////////////////////////////////////
-        else if (method.equals("display_gardens"))
+        //////////////////////////// ADD VEG ITEM  ////////////////////////////////////////
+        else if (method.equals("addVegItem"))
         {
             try {
-                URL url = new URL(displayGarden_URL);
+                URL url = new URL(addVegItem_url);
                 HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
                 httpURLConnection.setRequestMethod("POST"); //?
                 httpURLConnection.setDoInput(true);
 //                httpURLConnection.setDoOutput(true);
                 OutputStream outputStream = httpURLConnection.getOutputStream();
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-                String userID;
-                userID = params[1];
-                String data = URLEncoder.encode("userID", "UTF-8") + "=" + URLEncoder.encode(userID,"UTF-8" );
+                String gardenID, vID, vegName, affectedByRain, datePlanted, vegCount;
+                vID = params[1];
+                gardenID = params[2];
+                vegName = params[3];
+                affectedByRain = params[4];
+                datePlanted = params[5];
+                vegCount = params[6];
+                //ToDo pass through the estaimted harvest date
+//                int eta =
+                String data = URLEncoder.encode("gardenID", "UTF-8") + "=" + URLEncoder.encode(gardenID,"UTF-8" )
+                        + "&" + URLEncoder.encode("vID", "UTF-8") + "=" + URLEncoder.encode(vID,"UTF-8" )
+                        + "&" + URLEncoder.encode("vegName", "UTF-8") + "=" + URLEncoder.encode(vegName,"UTF-8" )
+                        + "&" + URLEncoder.encode("affectedByRain", "UTF-8") + "=" + URLEncoder.encode(affectedByRain,"UTF-8" )
+                        + "&" + URLEncoder.encode("datePlanted", "UTF-8") + "=" + URLEncoder.encode(datePlanted,"UTF-8")
+                        + "&" + URLEncoder.encode("vegCount", "UTF-8") + "=" + URLEncoder.encode(vegCount,"UTF-8") ;
+//                        + "&" + URLEncoder.encode("eta", "UTF-8") + "=" + URLEncoder.encode(eta,"UTF-8") ;
                 bufferedWriter.write(data);  //pass data string
                 bufferedWriter.flush();
                 bufferedWriter.close();
                 outputStream.close();
-                InputStream inputStream = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuilder stringBuilder = new StringBuilder(); //to read JSON response from bufferedReader
-                String line = "";  //take each line from reader and append to String.
-                while ((bufferedReader.readLine()) != null)///
-                { line = bufferedReader.readLine();
-                    stringBuilder.append(line+"\n");
-                }
-                //create a pause between background methods
-                httpURLConnection.disconnect(); //close connection
-                Thread.sleep(5500);
-//                Log.i();
-                return stringBuilder.toString().trim(); //return string builder in normal string format
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (ProtocolException e) {
-                e.printStackTrace();
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }   //close show garden else if
-
-        //////////////    Create  Garden         ///////////////////////////////////////////////////////////////////////////////
-        else if (method.equals("create_garden"))
-        {
-            try {
-                URL url = new URL(createGarden_URL);
-                HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
-                httpURLConnection.setRequestMethod("POST"); //?
-                httpURLConnection.setDoInput(true);
-                httpURLConnection.setDoOutput(true);
-                OutputStream outputStream = httpURLConnection.getOutputStream();
-                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-                String userID, gardenName;
-                userID = params[1];
-                gardenName = params[2];
-                String data = URLEncoder.encode("userID", "UTF-8") + "=" + URLEncoder.encode(userID,"UTF-8" ) + "&" +
-                        URLEncoder.encode("gardenName", "UTF-8")+ URLEncoder.encode(gardenName, "UTF-8");
-                bufferedWriter.write(data);
-                bufferedWriter.flush();
-                bufferedWriter.close();
-                outputStream.close();
-
                 //now to get the response FROM the server. (in Json, needs to be decoded)
                 InputStream inputStream = httpURLConnection.getInputStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -264,8 +223,9 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
                 { line = bufferedReader.readLine();
                     stringBuilder.append(line+"\n");
                 }
-                httpURLConnection.disconnect(); //close connection
-                Thread.sleep(2500);
+                //create a pause between background methods
+                httpURLConnection.disconnect(); //close conenction
+                Thread.sleep(1200);
 //                Log.i();
                 return stringBuilder.toString().trim(); //return string builder in normal string format
 
@@ -280,8 +240,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }   //close show garden else if
-
+        }   //close login else if
 
         return null;
     }
@@ -294,17 +253,13 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
     @Override
     //change argument to a String Json
     protected void onPostExecute(String json) {
-
         //we decode json data
         try {
-
             JSONObject jsonObject = new JSONObject(json);  //get Json object
             JSONArray jsonArray = jsonObject.getJSONArray("server_response");  //get objects' array
             JSONObject JO = jsonArray.getJSONObject(0); //get inner object from array at index 0
-//            JSONObject JO2 = JO.getJSONArray(); //get inner object from array at index 0
             String code = JO.getString("code");  //from server
             String message = JO.getString("message");
-//            Toast.makeText(this.activity,message, Toast.LENGTH_LONG).show();
             progressDialog.dismiss(); //to close progressDialog
 
             /////////////    REGISTER     ///////////////////
@@ -315,7 +270,6 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
             else if (code.equals("reg_false")){
                 showDialog("Registration Failed", message, code);
             }
-
             /////////////    LOGIN     ///////////////////
             else if (code.equals("login_true")){
                 int userID = JO.getInt("userID");
@@ -327,56 +281,22 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
                 extras.putString("message", message);
                 extras.putInt("userID", userID);
                 intent.putExtras(extras);
-//                homeBackgroundTask = new HomeActivity().new HomeBackgroundTask();
-//                homeBackgroundTask.execute("display_gardens", userID_STR);
                 activity.startActivity(intent);
+
+                /////////////    ADD VEG     ///////////////////
+                if (code.equals("addItem_success")){
+                    showDialog("Planted Successfully!", message, code);
+                }
+
+                //TODO launch background task to scrape DB and build text file of veg info.
+                new Thread(new DBScraper(ctx)).start();
             }
             else if (code.equals("login_false")){
                 showDialog("Login Error", message, code);
             }
-
-            /////////////    Display Gardens     ///////////////////
-            else if (code.equals("gardens_exist")){
-                TextView textView = (TextView) activity.findViewById(R.id.welcome_txt);
-                for (int i = 1; i < jsonArray.length(); i++) {
-                    JSONObject thisJO = jsonArray.getJSONObject(i);
-                    String tempGarden = "GardenID: " + thisJO.getString("gardenID") +  ".   Garden Name: " + thisJO.getString("gardenName");
-//                    json_gardens.add(tempGarden);  ///////*************
-                    adapter.add(tempGarden);
-//                    for (Iterator<String> iter = JO.keys(); iter.hasNext(); ) {
-//                        String key = iter.next();
-//                        try {
-////                            Object value = thisJO.get(key);
-//                            String value = thisJO.getString(key);
-//                            //bundle.put (value) maybe? then add to intent and pass intent to somewhere?
-//                        } catch (JSONException e) {
-//                            // Something went wrong!
-//                        }
-//                    } //for Iterator<string>
-                } //for int i =1
-//                Toast.makeText(this.activity,JO.toString(), Toast.LENGTH_LONG).show();
-                //fill list view with results. /////// ******* //////////////
-            }
-            else if (code.equals("no_gardens")){
-                showDialog("Login Error", message, code);
-            }
-
-            /////////////    CREATE GARDEN     ///////////////////
-            else if (code.equals("garden_created")){
-                showDialog("Garden Created!", message, code);
-            }
-            else if (code.equals("garden_exists")){
-                showDialog("Garden exists already", message, code);
-            }
-            else if (code.equals("createGarden_fail")){
-                showDialog("Error, create fail", message, code);
-            }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        adapter.notifyDataSetChanged();
-
     } //close on post execute
 
     //to analyse message and dipaly alert
@@ -393,8 +313,6 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
                     activity.finish();
                 }
             });
-//            AlertDialog alertDialog = builder.create();
-//            alertDialog.show();
         } //close if
         else if (code.equals("login_false")) { //if so we will show message
 
@@ -413,50 +331,6 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
                 }
             });
         } //close else if
-
-        else if (code.equals("no_gardens")) {
-            builder.setMessage(message);
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //when user clicks ok, we dismiss and finish activity
-                    dialog.dismiss();
-//                    activity.finish();
-                }
-            });
-//            AlertDialog alertDialog = builder.create();
-//            alertDialog.show();
-        }
-
-        else if (code.equals("createGarden_fail") || code.equals("garden_exists")) {
-            builder.setMessage(message);
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //when user clicks ok, we dismiss and finish activity
-                    dialog.dismiss();
-//                    activity.finish();
-                }
-            });
-//            AlertDialog alertDialog = builder.create();
-//            alertDialog.show();
-        }
-
-        else if (code.equals("garden_created")) {
-            builder.setMessage(message);
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //when user clicks ok, we dismiss and finish activity
-                    dialog.dismiss();
-//                    activity.finish();
-                    //launch activity here for entering in details etc
-                }
-            });
-//            AlertDialog alertDialog = builder.create();
-//            alertDialog.show();
-        }
-
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
 

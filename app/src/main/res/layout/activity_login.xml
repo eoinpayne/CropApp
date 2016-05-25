@@ -77,12 +77,12 @@
             android:layout_height="wrap_content"
             android:text="@string/login_btn_lbl"
             android:textStyle="bold"
-            style="?android:textAppearanceSmall"
-            android:layout_below="@id/password"
             android:layout_marginTop="25dp"
-            android:id="@+id/login_btn"
             android:background="@drawable/btn_selecter"
             android:textColor="@color/textColor"
+            style="?android:textAppearanceSmall"
+            android:layout_below="@id/password"
+            android:id="@+id/login_btn"
             />
     </RelativeLayout>
 

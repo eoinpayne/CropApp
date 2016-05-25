@@ -58,8 +58,9 @@ public class LoginActivity extends AppCompatActivity {
                     //start background task .. pass in RegisterActivity context to constructor in BackgroundTask.java
                     BackgroundTask backgroundTask = new BackgroundTask(LoginActivity.this);
                     backgroundTask.execute("login", Email.getText().toString(), mPassword.getText().toString());
-//                    backgroundTask.execute("login", "z", "z");
 
+//                    homeBackgroundTask.execute("display_gardens", HomeActivity.global_userID);
+//                    shared prefewrences if not null, load out simulataneously
                 } //else
 
 

@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="@color/colorPrimary"
+    >
 
     <!-- Title -->
 
@@ -65,7 +67,13 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@id/date"
-        android:text="@string/choose_date_string" />
+        android:text="@string/choose_date_string"
+        style="?android:textAppearanceSmall"
+        android:textStyle="bold"
+        android:layout_marginLeft="5dp"
+        android:background="@drawable/btn_selecter"
+        android:textColor="@color/textColor"
+        />
 
     <Button
         android:id="@+id/time_picker_button"
@@ -74,7 +82,13 @@
         android:layout_alignParentRight="true"
         android:layout_alignTop="@id/date_picker_button"
         android:layout_below="@id/time"
-        android:text="@string/choose_time_string" />
+        android:text="@string/choose_time_string"
+        style="?android:textAppearanceSmall"
+        android:textStyle="bold"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/btn_selecter"
+        android:textColor="@color/textColor"
+        />
 
     <!-- Buttons -->
 
@@ -84,8 +98,14 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginTop="25dp"
-        android:text="@string/cancel_string" />
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        style="?android:textAppearanceSmall"
+        android:textStyle="bold"
+        android:background="@drawable/btn_selecter"
+        android:textColor="@color/textColor"
+        android:text="@string/cancel_string"
+        />
 
     <Button
         android:id="@+id/resetButton"
@@ -93,7 +113,13 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/reset_string" />
+        android:text="@string/reset_string"
+        style="?android:textAppearanceSmall"
+        android:textStyle="bold"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/btn_selecter"
+        android:textColor="@color/textColor"
+        />
 
     <Button
         android:id="@+id/submitButton"
@@ -101,6 +127,13 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:text="@string/submit_string" />
+        android:text="@string/submit_string"
+        style="?android:textAppearanceSmall"
+        android:textStyle="bold"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/btn_selecter"
+        android:textColor="@color/textColor"
+        />
 
 </RelativeLayout>

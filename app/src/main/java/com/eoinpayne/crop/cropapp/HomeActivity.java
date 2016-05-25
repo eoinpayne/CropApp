@@ -2,7 +2,9 @@ package com.eoinpayne.crop.cropapp;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -39,36 +41,30 @@ import java.util.ArrayList;
 public class HomeActivity extends  AppCompatActivity {          //ListActivity {
 
     public static int global_userID =  0;
-//    int userID = 10;  ///////****/////
     String UserID_String = Integer.toString(global_userID); ///////****/////
     TextView textView;
     Button updateButton;
-    Button showUpdateButton;
     Button createGardenButton;
-
-    String JSON_STRING;
     ListView gardenListView;
-
     public ArrayList<String> json_gardens= new ArrayList<>();
     public ArrayAdapter<String> adapter;  //could use cursosr adaptor for db?
-
-    AlertDialog.Builder builder;  //we can initialise in onPreExecute method
+//    AlertDialog.Builder builder;  //we can initialise in onPreExecute method
     public EditText input;
 
-    public ValContainer gardenValueContainer;
-
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        context = this;
+
         input = new EditText(HomeActivity.this);
         gardenListView = (ListView) findViewById(R.id.garden_list);
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, json_gardens);
         adapter.add("test");
         gardenListView.setAdapter(adapter);
         new HomeBackgroundTask().execute("display_gardens", UserID_String);
-
 
         //displaying message we passed through with intent "message" in post activity of background task
         textView = (TextView) findViewById(R.id.welcome_txt);
@@ -77,10 +73,6 @@ public class HomeActivity extends  AppCompatActivity {          //ListActivity {
         int userID = bundle.getInt("userID");
         global_userID = userID;
         textView.setText(message);
-
-
-        gardenValueContainer = new ValContainer();
-        gardenValueContainer.setVal("abc");
 
 //        //move to on create and have this button to refresh?
         updateButton = (Button)findViewById(R.id.updateGarden_btn);
@@ -92,88 +84,72 @@ public class HomeActivity extends  AppCompatActivity {          //ListActivity {
             }
         });
 
-        showUpdateButton = (Button)findViewById(R.id.showUpdateGarden_btn);
-        showUpdateButton .setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                adapter.notifyDataSetChanged();
-            }
-        });
-
-        //create garden
+        ////////////create garden
         createGardenButton = (Button)findViewById(R.id.createGarden_btn);
         createGardenButton .setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                final String myGardenName;
-//                String s = getGardenName();
                 getGardenName();
-
-//                try {
-//                    new HomeBackgroundTask().execute("create_garden", UserID_String, gardenValueContainer.getVal());
-//
-//                }catch (Exception e){
-//                    e.printStackTrace();
-//                }
-
-//                String myGN = gardenValueContainer.getVal();
-//                HomeBackgroundTask mhomebackgroundtask1 = new HomeBackgroundTask();
-//                mhomebackgroundtask1.execute("create_garden", UserID_String, myGN);
-
-//                String myGardenName = getGardenName(); ///**
-//                BackgroundTask backgroundTask = new BackgroundTask(HomeActivity.this);
-//                backgroundTask.execute("create_garden", UserID_String, myGN);
             }
         });
 
+        //// LOAD GARDEN
+        gardenListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                //TODO delete garden item and remove from DB on long click
+                Toast.makeText(getBaseContext(),parent.getItemAtPosition(position) +" is to be deleted", Toast.LENGTH_LONG).show();
+                return true;
+            }
+        });
 
+        //// LOAD GARDEN
         gardenListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getBaseContext(),parent.getItemAtPosition(position) +" is selected", Toast.LENGTH_LONG).show();
-                //start intent activy
+
+                Object selected_garden = parent.getItemAtPosition(position);
+                String selected_garden_str = selected_garden.toString();
+
+//                int userID = JO.getInt("userID");
+//                String userID_STR = JO.getString("userID");
+//                HomeActivity.global_userID = userID;
+//                String str_userID = JO.getString("userID");
+
+
+//                String selectedGarden = parent.getItemAtPosition(position);
+
+//                Intent intent = new Intent(HomeActivity.this, GardenActivity.class );
+                Intent intent = new Intent(HomeActivity.this, VegManagerActivity.class );
+//                Bundle extras = new Bundle();
+//                extras.putString("message", message);  //pass garden name for @+id/garden_title"
+//                extras.putInt("userID", userID);
+//                intent.putExtras(extras);
+                startActivity(intent);
+
             }
         });
-
     } //close onCreate
-
 
     public void getGardenName()
     {
         //call pop up window to take garden name
         AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
         builder.setTitle("Input garden name");
-
         final EditText input = new EditText(HomeActivity.this);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setView(input);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-//                input.getText().toString();
-
                 final String s;
                 Editable myS = input.getText();
                 s = myS.toString();
-                gardenValueContainer.setVal(s);
-
                 try {
                     new HomeBackgroundTask().execute("create_garden", UserID_String, s);
-
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-
-//                new HomeBackgroundTask().execute("create_garden", UserID_String,s);
-//                HomeBackgroundTask mhomebackgroundtask11 = new HomeBackgroundTask();
-//                mhomebackgroundtask11.execute("create_garden", UserID_String,s);
-
-//                BackgroundTask backgroundTask = new BackgroundTask(HomeActivity.this);
-//                backgroundTask.execute("create_garden", UserID_String, myGardenName);
+                        }   catch (Exception e){  e.printStackTrace();   }
             }
-
-
-
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
@@ -182,14 +158,9 @@ public class HomeActivity extends  AppCompatActivity {          //ListActivity {
             }
         });
         builder.show();
-
-//        return gardenValueContainer.getVal();
-
     } //close getGardenName
 
 //---------------------------------------------------------------------------------------------
-//
-//
 // ---------------------------------------------------------------------------------------------
 
     public class HomeBackgroundTask extends AsyncTask<String,Void,String> {
@@ -207,13 +178,9 @@ public class HomeActivity extends  AppCompatActivity {          //ListActivity {
             progressDialog.setIndeterminate(true);
             progressDialog.setCancelable(false);
             progressDialog.show();
-
-//            adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, json_gardens);
-
         }
 
         @Override
-        //change return type & public class BackgroundTask 3rd param to String
         protected String doInBackground(String... params) {
             String method = params[0];
 
@@ -245,7 +212,7 @@ public class HomeActivity extends  AppCompatActivity {          //ListActivity {
                     }
                     //create a pause between background methods
                     httpURLConnection.disconnect(); //close connection
-                    Thread.sleep(5500);
+                    Thread.sleep(1200);
                     return stringBuilder.toString().trim(); //return string builder in normal string format
 
                 } catch (MalformedURLException e) {
@@ -276,7 +243,7 @@ public class HomeActivity extends  AppCompatActivity {          //ListActivity {
                     userID = params[1];
                     gardenName = params[2];
                     String data = URLEncoder.encode("userID", "UTF-8") + "=" + URLEncoder.encode(userID,"UTF-8" ) + "&" +
-                            URLEncoder.encode("gardenName", "UTF-8")+ URLEncoder.encode(gardenName, "UTF-8");
+                            URLEncoder.encode("gardenName", "UTF-8")+ "=" + URLEncoder.encode(gardenName, "UTF-8");
                     bufferedWriter.write(data);
                     bufferedWriter.flush();
                     bufferedWriter.close();
@@ -292,7 +259,7 @@ public class HomeActivity extends  AppCompatActivity {          //ListActivity {
                         stringBuilder.append(line+"\n");
                     }
                     httpURLConnection.disconnect(); //close connection
-                    Thread.sleep(2500);
+                    Thread.sleep(1200);
                     return stringBuilder.toString().trim(); //return string builder in normal string format
 
                 } catch (MalformedURLException e) {
@@ -324,18 +291,16 @@ public class HomeActivity extends  AppCompatActivity {          //ListActivity {
                 JSONObject jsonObject = new JSONObject(json);  //get Json object
                 JSONArray jsonArray = jsonObject.getJSONArray("server_response");  //get objects' array
                 JSONObject JO = jsonArray.getJSONObject(0); //get inner object from array at index 0
-//            JSONObject JO2 = JO.getJSONArray(); //get inner object from array at index 0
                 String code = JO.getString("code");  //from server
                 String message = JO.getString("message");
-//            Toast.makeText(this.activity,message, Toast.LENGTH_LONG).show();
                 progressDialog.dismiss(); //to close progressDialog
 
                 /////////////    Display Gardens     ///////////////////
+                //if user has gardens in the db to display
                 if (code.equals("gardens_exist")){
                     for (int i = 1; i < jsonArray.length(); i++) {
                         JSONObject thisJO = jsonArray.getJSONObject(i);
                         String tempGarden = "GardenID: " + thisJO.getString("gardenID") +  ".   Garden Name: " + thisJO.getString("gardenName");
-//                    json_gardens.add(tempGarden);  ///////*************
                         json_gardens.add(tempGarden);
                         adapter.notifyDataSetChanged();
                     } //for int i =1
@@ -346,6 +311,9 @@ public class HomeActivity extends  AppCompatActivity {          //ListActivity {
                 /////////////    CREATE GARDEN     ///////////////////
                 else if (code.equals("garden_created")){
                     showDialog("Garden Created!", message, code);
+                        String newGarden = "GardenID: " + JO.getString("gardenID") +  ".   Garden Name: " + JO.getString("gardenName");
+                        json_gardens.add(newGarden);
+                        adapter.notifyDataSetChanged();
                 }
                 else if (code.equals("garden_exists")){
                     showDialog("Garden exists already", message, code);
@@ -353,7 +321,6 @@ public class HomeActivity extends  AppCompatActivity {          //ListActivity {
                 else if (code.equals("createGarden_fail")){
                     showDialog("Error, create fail", message, code);
                 }
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -362,65 +329,32 @@ public class HomeActivity extends  AppCompatActivity {          //ListActivity {
         public void showDialog(String title, String message, String code)
         {
             builder.setTitle(title);
-            if (code.equals("no_gardens")) {
+            if (code.equals("createGarden_fail") || code.equals("garden_exists")
+                    || code.equals("garden_created") || code.equals("no_gardens")) {
                 builder.setMessage(message);
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //when user clicks ok, we dismiss and finish activity
                         dialog.dismiss();
-//                    activity.finish();
                     }
                 });
-//            AlertDialog alertDialog = builder.create();
-//            alertDialog.show();
             }
-
-            else if (code.equals("createGarden_fail") || code.equals("garden_exists")) {
-                builder.setMessage(message);
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //when user clicks ok, we dismiss and finish activity
-                        dialog.dismiss();
-//                    activity.finish();
-                    }
-                });
-//            AlertDialog alertDialog = builder.create();
-//            alertDialog.show();
-            }
-
-            else if (code.equals("garden_created")) {
-                builder.setMessage(message);
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //when user clicks ok, we dismiss and finish activity
-                        dialog.dismiss();
-//                    activity.finish();
-                        //launch activity here for entering in details etc
-                    }
-                });
-//            AlertDialog alertDialog = builder.create();
-//            alertDialog.show();
-            }
-
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
         }
     }
 
-    public class ValContainer{
-        private String val;
-        public ValContainer(){}
-        public ValContainer(String v){
-            this.val = v; }
-        public String getVal(){ return val;}
-        public  void setVal(String val){
-            this.val = val;
-        }
 
-    }
+//    public class ValContainer{
+//        private String val;
+//        public ValContainer(){}
+//        public ValContainer(String v){
+//            this.val = v; }
+//        public String getVal(){ return val;}
+//        public  void setVal(String val){
+//            this.val = val;
+//        }
+//    }
 
 
 

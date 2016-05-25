@@ -5,4 +5,8 @@
     <color name="colorAccent">#1B5E20</color>
     <color name="textColor">#4E342E</color>
     <color name="buttonColor">#546E7A</color>
+
+    <color name="cyan">#8000FFFF</color>
+    <color name="magenta">#80FF00FF</color>
+
 </resources>
