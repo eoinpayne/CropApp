@@ -40,14 +40,16 @@ import java.util.ArrayList;
 
 public class HomeActivity extends  AppCompatActivity {          //ListActivity {
 
-    public static int global_userID =  0;
-    String UserID_String = Integer.toString(global_userID); ///////****/////
+    public static int global_userID;
+    public static String global_UserID_String;
+    public String UserID_String = Integer.toString(global_userID); ///////****/////
     TextView textView;
     Button updateButton;
     Button createGardenButton;
     ListView gardenListView;
-    public ArrayList<String> json_gardens= new ArrayList<>();
-    public ArrayAdapter<String> adapter;  //could use cursosr adaptor for db?
+    public ArrayList<Garden> json_gardens= new ArrayList<>();
+    public ArrayAdapter<Garden> adapter;  //could use cursosr adaptor for db?
+
 //    AlertDialog.Builder builder;  //we can initialise in onPreExecute method
     public EditText input;
 
@@ -59,20 +61,27 @@ public class HomeActivity extends  AppCompatActivity {          //ListActivity {
         setContentView(R.layout.activity_home);
         context = this;
 
-        input = new EditText(HomeActivity.this);
-        gardenListView = (ListView) findViewById(R.id.garden_list);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, json_gardens);
-        adapter.add("test");
-        gardenListView.setAdapter(adapter);
-        new HomeBackgroundTask().execute("display_gardens", UserID_String);
-
         //displaying message we passed through with intent "message" in post activity of background task
         textView = (TextView) findViewById(R.id.welcome_txt);
         Bundle bundle = getIntent().getExtras();
         String message = bundle.getString("message");
         int userID = bundle.getInt("userID");
         global_userID = userID;
+        global_UserID_String = Integer.toString(userID);
         textView.setText(message);
+
+
+
+
+
+        input = new EditText(HomeActivity.this);
+        gardenListView = (ListView) findViewById(R.id.garden_list);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, json_gardens);
+//        adapter.add("test");
+        gardenListView.setAdapter(adapter);
+        new HomeBackgroundTask().execute("display_gardens", UserID_String);
+
+
 
 //        //move to on create and have this button to refresh?
         updateButton = (Button)findViewById(R.id.updateGarden_btn);
@@ -109,8 +118,8 @@ public class HomeActivity extends  AppCompatActivity {          //ListActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getBaseContext(),parent.getItemAtPosition(position) +" is selected", Toast.LENGTH_LONG).show();
 
-                Object selected_garden = parent.getItemAtPosition(position);
-                String selected_garden_str = selected_garden.toString();
+                Garden selected_garden = (Garden)parent.getItemAtPosition(position);
+//                String selected_garden_str = selected_garden.toString();
 
 //                int userID = JO.getInt("userID");
 //                String userID_STR = JO.getString("userID");
@@ -122,10 +131,12 @@ public class HomeActivity extends  AppCompatActivity {          //ListActivity {
 
 //                Intent intent = new Intent(HomeActivity.this, GardenActivity.class );
                 Intent intent = new Intent(HomeActivity.this, VegManagerActivity.class );
-//                Bundle extras = new Bundle();
+                Bundle extras = new Bundle();
 //                extras.putString("message", message);  //pass garden name for @+id/garden_title"
-//                extras.putInt("userID", userID);
-//                intent.putExtras(extras);
+                extras.putString("gardenName", selected_garden.getGardenName());
+                extras.putString("gardenID", selected_garden.getGardenID());
+                extras.putString("userID", selected_garden.getUserID());
+                intent.putExtras(extras);
                 startActivity(intent);
 
             }
@@ -143,11 +154,11 @@ public class HomeActivity extends  AppCompatActivity {          //ListActivity {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                final String s;
-                Editable myS = input.getText();
-                s = myS.toString();
+                final String gardenName;
+                Editable gardenName_input = input.getText();
+                gardenName = gardenName_input.toString();
                 try {
-                    new HomeBackgroundTask().execute("create_garden", UserID_String, s);
+                    new HomeBackgroundTask().execute("create_garden", UserID_String, gardenName);
                         }   catch (Exception e){  e.printStackTrace();   }
             }
         });
@@ -300,7 +311,11 @@ public class HomeActivity extends  AppCompatActivity {          //ListActivity {
                 if (code.equals("gardens_exist")){
                     for (int i = 1; i < jsonArray.length(); i++) {
                         JSONObject thisJO = jsonArray.getJSONObject(i);
-                        String tempGarden = "GardenID: " + thisJO.getString("gardenID") +  ".   Garden Name: " + thisJO.getString("gardenName");
+                        String gardenName = thisJO.getString("gardenName");
+                        String gardenID = thisJO.getString("gardenID");
+                        String userID = UserID_String;
+                        Garden tempGarden = new Garden(gardenName,gardenID,userID );
+//                        String tempGarden = "GardenID: " + thisJO.getString("gardenID") +  ".   Garden Name: " + thisJO.getString("gardenName");
                         json_gardens.add(tempGarden);
                         adapter.notifyDataSetChanged();
                     } //for int i =1
@@ -311,9 +326,13 @@ public class HomeActivity extends  AppCompatActivity {          //ListActivity {
                 /////////////    CREATE GARDEN     ///////////////////
                 else if (code.equals("garden_created")){
                     showDialog("Garden Created!", message, code);
-                        String newGarden = "GardenID: " + JO.getString("gardenID") +  ".   Garden Name: " + JO.getString("gardenName");
-                        json_gardens.add(newGarden);
-                        adapter.notifyDataSetChanged();
+                    String gardenName = JO.getString("gardenName");
+                    String gardenID = JO.getString("gardenID");
+                    String userID = UserID_String;
+                    Garden newGarden = new Garden(gardenName,gardenID,userID );
+//                        String newGarden = "GardenID: " + JO.getString("gardenID") +  ".   Garden Name: " + JO.getString("gardenName");
+                    json_gardens.add(newGarden);
+                    adapter.notifyDataSetChanged();
                 }
                 else if (code.equals("garden_exists")){
                     showDialog("Garden exists already", message, code);

@@ -38,7 +38,6 @@ public class VegManagerActivity extends ListActivity {
 	Button waterAll;
 	// Add a vegItem Request Code
 	private static final int ADD_VEG_ITEM_REQUEST = 0;  //request code? is this always 0?
-
 	private static final String FILE_NAME = "VegManagerActivityData1.txt";
 	private static final String TAG = "Lab-UserInterface";
 
@@ -47,13 +46,21 @@ public class VegManagerActivity extends ListActivity {
 	private static final int MENU_DUMP = Menu.FIRST + 1;
 
 	VegListAdapter mAdapter;
-
+	private String gardenName;
+	private String gardenID;
+	private String userID;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		// Create a new VegListAdapter for this ListActivity's ListView
 		mAdapter = new VegListAdapter(getApplicationContext()); //mContext instead of getApplicationContect()?
+
+		Bundle bundle = getIntent().getExtras();
+		gardenName = bundle.getString("gardenName");
+		gardenID = bundle.getString("gardenID");
+		userID = bundle.getString("userID");
+
 
 		//Veg EXTRA 5 - TABS
 //		final ActionBar actionBar = getActionBar();
@@ -89,6 +96,11 @@ public class VegManagerActivity extends ListActivity {
 			@Override
 			public void onClick(View v) {
 				Intent addVeg_intent = new Intent(getApplicationContext(), AddVegActivity.class);
+				Bundle extras = new Bundle();
+				extras.putString("gardenName", gardenName);
+				extras.putString("gardenID", gardenID);
+				extras.putString("userID", userID);
+				addVeg_intent.putExtras(extras);
 				startActivityForResult(addVeg_intent, ADD_VEG_ITEM_REQUEST);
 			}
 		});
@@ -183,6 +195,12 @@ public class VegManagerActivity extends ListActivity {
 	}
 
 	// Load stored vegItems
+	//TODO when user logs in, start background task that collects all vegItems belonging to his userID
+	//TODO write all these items to a file stored locally
+	//TODO when a garden is selected, scan the file and build vegItems for all lines that have a userId matching
+	//TODO add these vegItems to the adapter's list.
+	//TODO any time a new item is added/removed to garden, update the file. always build list from file?
+	//TODO Call this background task anytime user logs in and any time new item is added?
 	private void loadItems() {
 		BufferedReader reader = null;
 		try {

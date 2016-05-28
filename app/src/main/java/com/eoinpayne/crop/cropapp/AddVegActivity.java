@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -28,7 +27,6 @@ import java.util.Calendar;
 import java.util.Date;
 import org.json.JSONArray;
 import com.eoinpayne.crop.cropapp.VegItem.Affected;
-import com.eoinpayne.crop.cropapp.VegItem.Status;
 
 
 public class AddVegActivity extends Activity {  //appcompat?
@@ -47,6 +45,9 @@ public class AddVegActivity extends Activity {  //appcompat?
 	private Spinner vegSpinner;
 	private Spinner countSpinner;
 	private RadioButton mDefaultAffectedButton;
+	private String mGardenName;
+	private String mGardenID;
+	private String mUserID;
 	//	public int mCreate = 0;
 	//  public int mRestart = 0;
 	//	TextView mTvCreate ;
@@ -59,8 +60,13 @@ public class AddVegActivity extends Activity {  //appcompat?
 		setContentView(R.layout.add_veg);
 		context = this;
 
+		Bundle bundle = getIntent().getExtras();
+		mGardenName = bundle.getString("gardenName");
+		mGardenID = bundle.getString("gardenID");
+		mUserID = bundle.getString("userID");
+
 		vegSpinner = (Spinner) findViewById(R.id.chooseVegSpinner);
-		ArrayList<String> vegItems = getVegNames(DBScraper.vegNames_file);
+		ArrayList<String> vegItems = getVegNames(DBScraper_vegInfo.vegNames_file);
 		ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_layout, R.id.txt,vegItems);
 		vegSpinner.setAdapter(adapter);
 		countSpinner = (Spinner) findViewById(R.id.QuantitySpinner);
@@ -152,18 +158,14 @@ public class AddVegActivity extends Activity {  //appcompat?
 					String chosenVeg = vegSpinner.getSelectedItem().toString(); //vegSpinner
 					VegItem.packageIntent(data, chosenVeg, affected, fullDate, vegCount);
 					setResult(Activity.RESULT_OK, data);
-
-//					try {
-//						BackgroundTask backgroundTask = new BackgroundTask(AddVegActivity.this);
-//						backgroundTask.execute("register", Name.getText().toString(),
-//								Email.getText().toString(), mPassword.getText().toString());
-//					}catch (Exception e){
-//						e.printStackTrace();
-//					}
-
+					try {
+						BackgroundTask backgroundTask = new BackgroundTask(AddVegActivity.this);
+						backgroundTask.execute("addVegItem", mGardenID, chosenVeg, affected.toString(), fullDate, vegCount, HomeActivity.global_UserID_String);
+					}catch (Exception e){
+						e.printStackTrace();
+					}
 					finish();
 				}
-
 			}
 		});
 	} //CLOSE ONCREATE
@@ -180,7 +182,7 @@ public class AddVegActivity extends Activity {  //appcompat?
 //			String yourFilePath = context.getFilesDir() + "/" + "filename";
 //			File myVegNames_file = new File( yourFilePath );
 
-			FileInputStream fileInputStream = openFileInput(DBScraper.vegNames_file);
+			FileInputStream fileInputStream = openFileInput(DBScraper_vegInfo.vegNames_file);
 			InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
 			BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 			StringBuilder stringBuilder = new StringBuilder();

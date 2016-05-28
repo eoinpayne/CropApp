@@ -1,6 +1,5 @@
 package com.eoinpayne.crop.cropapp;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -9,12 +8,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,7 +30,6 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * Created by Hefty Balls on 24/04/2016.
@@ -119,7 +114,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
                 }
                 //create a pause between background methods
                 httpURLConnection.disconnect(); //close conenction
-                Thread.sleep(1200);
+                Thread.sleep(800);
 //                Log.i();
                 return stringBuilder.toString().trim(); //return string builder in normal string format
 
@@ -194,21 +189,22 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
 //                httpURLConnection.setDoOutput(true);
                 OutputStream outputStream = httpURLConnection.getOutputStream();
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-                String gardenID, vID, vegName, affectedByRain, datePlanted, vegCount;
-                vID = params[1];
-                gardenID = params[2];
-                vegName = params[3];
-                affectedByRain = params[4];
-                datePlanted = params[5];
-                vegCount = params[6];
+                String gardenID, userID, vegName, affectedByRain, datePlanted, vegCount;
+//                userID = params[1];
+                gardenID = params[1];
+                vegName = params[2];
+                affectedByRain = params[3];
+                datePlanted = params[4];
+                vegCount = params[5];
+                userID = params[6];
                 //ToDo pass through the estaimted harvest date
 //                int eta =
                 String data = URLEncoder.encode("gardenID", "UTF-8") + "=" + URLEncoder.encode(gardenID,"UTF-8" )
-                        + "&" + URLEncoder.encode("vID", "UTF-8") + "=" + URLEncoder.encode(vID,"UTF-8" )
+                        + "&" + URLEncoder.encode("userID", "UTF-8") + "=" + URLEncoder.encode(userID,"UTF-8" )
                         + "&" + URLEncoder.encode("vegName", "UTF-8") + "=" + URLEncoder.encode(vegName,"UTF-8" )
                         + "&" + URLEncoder.encode("affectedByRain", "UTF-8") + "=" + URLEncoder.encode(affectedByRain,"UTF-8" )
                         + "&" + URLEncoder.encode("datePlanted", "UTF-8") + "=" + URLEncoder.encode(datePlanted,"UTF-8")
-                        + "&" + URLEncoder.encode("vegCount", "UTF-8") + "=" + URLEncoder.encode(vegCount,"UTF-8") ;
+                        + "&" + URLEncoder.encode("vegCount", "UTF-8") + "=" + URLEncoder.encode(vegCount,"UTF-8");
 //                        + "&" + URLEncoder.encode("eta", "UTF-8") + "=" + URLEncoder.encode(eta,"UTF-8") ;
                 bufferedWriter.write(data);  //pass data string
                 bufferedWriter.flush();
@@ -276,6 +272,8 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
                 String userID_STR = JO.getString("userID");
                 HomeActivity.global_userID = userID;
                 String str_userID = JO.getString("userID");
+                //ToDo launch background task to scrape DB and build text file of items belonging to user.
+
                 Intent intent = new Intent(activity, HomeActivity.class);
                 Bundle extras = new Bundle();
                 extras.putString("message", message);
@@ -289,7 +287,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
                 }
 
                 //TODO launch background task to scrape DB and build text file of veg info.
-                new Thread(new DBScraper(ctx)).start();
+                new Thread(new DBScraper_vegInfo(ctx)).start();
             }
             else if (code.equals("login_false")){
                 showDialog("Login Error", message, code);

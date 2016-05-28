@@ -29,7 +29,7 @@ import java.net.URLEncoder;
 /**
  * Created by Hefty Balls on 21/05/2016.
  */
-public class DBScraper implements Runnable {
+public class DBScraper_vegInfo implements Runnable {
 
     String scrapeVegName_url = "http://10.0.2.2/scrapeVegName.php";
     String scrapeAllVegInfo_url = "http://10.0.2.2/scrapeAllVegInfo.php";
@@ -40,7 +40,7 @@ public class DBScraper implements Runnable {
     boolean deleted1;
     boolean deleted2;
 
-    public DBScraper(Context current){
+    public DBScraper_vegInfo(Context current){
         ctx = current;
     }
 
@@ -51,8 +51,8 @@ public class DBScraper implements Runnable {
 
         try {
 //            File dir = ctx.getFilesDir();
-//            File allVegInfo_file_delete = new File(dir, allVegInfo_file);
-//            File vegNames_file_delete = new File(dir, allVegInfo_file);
+//            File allVegInfo_file_delete = new File(dir, userVeg_file);
+//            File vegNames_file_delete = new File(dir, userVeg_file);
 //            deleted1 = allVegInfo_file_delete.delete();
 //            deleted2 = vegNames_file_delete.delete();
             deleted1 = ctx.deleteFile(allVegInfo_file);
@@ -103,24 +103,21 @@ public class DBScraper implements Runnable {
                 JSONObject jsonObject = new JSONObject(json);  //get Json object
                 JSONArray jsonArray = jsonObject.getJSONArray("server_response");  //get objects' array
                 JSONObject JO = jsonArray.getJSONObject(0); //get inner object from array at index 0
-                for (int i = 0; i < jsonArray.length(); i++) {
+                for (int i = 0; i < jsonArray.length(); i++)
+                {
                     JSONObject thisJO = jsonArray.getJSONObject(i);
                     String allVegInfo = "VegID: " + thisJO.getString("vID") + ".   Veg Name: " + thisJO.getString("vegName")
                             + ".   Preferred Soil: " + thisJO.getString("pSoilType") + thisJO.getString("pSoilType");
                     String vegName = thisJO.getString("vegName") + "\n";
-
-
                     try {
                         //todo write in full json object of everything. then parse out after to allow choosing of "carrot"
 
                         FileOutputStream fos_vegInfo = ctx.openFileOutput(allVegInfo_file, ctx.MODE_APPEND);
                         fos_vegInfo.write(allVegInfo.getBytes());
                         fos_vegInfo.close();
-
                         FileOutputStream fos_vegNames = ctx.openFileOutput(vegNames_file, ctx.MODE_APPEND);
                         fos_vegNames.write(vegName.getBytes());
                         fos_vegNames.close();
-
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
