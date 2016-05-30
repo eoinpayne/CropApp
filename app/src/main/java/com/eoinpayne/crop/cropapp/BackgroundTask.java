@@ -42,8 +42,11 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
     //define variables
 //    String register_url = "http://192.168.0.34/register.php";
 //    String login_url = "http://192.168.0.34/login.php";
+//    String addVegItem_url = "http://192.168.0.34/addVeg.php";
+
 //    String register_url = "http://147.252.139.83/register.php";
 //    String login_url = "http://147.252.139.83/login.php";
+
     String register_url = "http://10.0.2.2/register.php"; //make global
     String login_url = "http://10.0.2.2/login.php";
     String addVegItem_url = "http://10.0.2.2/addVeg.php";
@@ -161,7 +164,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
                 }
                 //create a pause between background methods
                 httpURLConnection.disconnect(); //close conenction
-                Thread.sleep(1200);
+                Thread.sleep(1300);
 //                Log.i();
                 return stringBuilder.toString().trim(); //return string builder in normal string format
 
@@ -189,7 +192,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
 //                httpURLConnection.setDoOutput(true);
                 OutputStream outputStream = httpURLConnection.getOutputStream();
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-                String gardenID, userID, vegName, affectedByRain, datePlanted, vegCount;
+                String gardenID, userID, vegName, affectedByRain, datePlanted, vegCount, lastWatered;
 //                userID = params[1];
                 gardenID = params[1];
                 vegName = params[2];
@@ -197,6 +200,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
                 datePlanted = params[4];
                 vegCount = params[5];
                 userID = params[6];
+                lastWatered = params[7];
                 //ToDo pass through the estaimted harvest date
 //                int eta =
                 String data = URLEncoder.encode("gardenID", "UTF-8") + "=" + URLEncoder.encode(gardenID,"UTF-8" )
@@ -204,7 +208,8 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
                         + "&" + URLEncoder.encode("vegName", "UTF-8") + "=" + URLEncoder.encode(vegName,"UTF-8" )
                         + "&" + URLEncoder.encode("affectedByRain", "UTF-8") + "=" + URLEncoder.encode(affectedByRain,"UTF-8" )
                         + "&" + URLEncoder.encode("datePlanted", "UTF-8") + "=" + URLEncoder.encode(datePlanted,"UTF-8")
-                        + "&" + URLEncoder.encode("vegCount", "UTF-8") + "=" + URLEncoder.encode(vegCount,"UTF-8");
+                        + "&" + URLEncoder.encode("vegCount", "UTF-8") + "=" + URLEncoder.encode(vegCount,"UTF-8")
+                        + "&" + URLEncoder.encode("lastWatered", "UTF-8") + "=" + URLEncoder.encode(lastWatered,"UTF-8");
 //                        + "&" + URLEncoder.encode("eta", "UTF-8") + "=" + URLEncoder.encode(eta,"UTF-8") ;
                 bufferedWriter.write(data);  //pass data string
                 bufferedWriter.flush();
@@ -267,7 +272,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
                 showDialog("Registration Failed", message, code);
             }
             /////////////    LOGIN     ///////////////////
-            else if (code.equals("login_true")){
+            else if (code.equals("login_true")) {
                 int userID = JO.getInt("userID");
                 String userID_STR = JO.getString("userID");
                 HomeActivity.global_userID = userID;
@@ -279,16 +284,18 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
                 extras.putString("message", message);
                 extras.putInt("userID", userID);
                 intent.putExtras(extras);
-                activity.startActivity(intent);
-
-                /////////////    ADD VEG     ///////////////////
-                if (code.equals("addItem_success")){
-                    showDialog("Planted Successfully!", message, code);
-                }
-
                 //TODO launch background task to scrape DB and build text file of veg info.
+                activity.startActivity(intent);
                 new Thread(new DBScraper_vegInfo(ctx)).start();
+                new Thread(new DBScraper_userVeg(ctx)).start();
+                //ToDo finish?
+
             }
+            /////////////    ADD VEG     ///////////////////
+            else if (code.equals("addItem_success")){
+                showDialog("Planted Successfully!", message, code);
+            }
+
             else if (code.equals("login_false")){
                 showDialog("Login Error", message, code);
             }

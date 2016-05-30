@@ -7,6 +7,7 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.JsonWriter;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,12 +21,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.eoinpayne.crop.cropapp.VegItem.Affected;
 
 
@@ -48,6 +55,11 @@ public class AddVegActivity extends Activity {  //appcompat?
 	private String mGardenName;
 	private String mGardenID;
 	private String mUserID;
+	String chosenVeg;
+	String vegCount;
+	String fullDate;
+	Affected affected;
+	String lastWatered;
 	//	public int mCreate = 0;
 	//  public int mRestart = 0;
 	//	TextView mTvCreate ;
@@ -136,13 +148,14 @@ public class AddVegActivity extends Activity {  //appcompat?
 				// Gather vegItem data
 //
 //				//TODO -  Get if Affected by Rain XX
-				Affected affected = getAffected();
+				affected = getAffected();
 
 				//TODO -  Get veg Count
-				String vegCount = countSpinner.getSelectedItem().toString();
+				vegCount = countSpinner.getSelectedItem().toString();
 
 				// Date
-				String fullDate = dateString + " " + timeString;
+				fullDate = dateString + " " + timeString;
+				lastWatered = fullDate;
 
 				// Package vegItem data into an Intent
 				Intent data = new Intent();
@@ -155,15 +168,49 @@ public class AddVegActivity extends Activity {  //appcompat?
 				}
 				else
 				{
-					String chosenVeg = vegSpinner.getSelectedItem().toString(); //vegSpinner
-					VegItem.packageIntent(data, chosenVeg, affected, fullDate, vegCount);
+					chosenVeg = vegSpinner.getSelectedItem().toString(); //vegSpinner
+					VegItem.packageIntent(data, chosenVeg, affected, fullDate, vegCount, lastWatered);
 					setResult(Activity.RESULT_OK, data);
+					//todo persists data to the database
 					try {
 						BackgroundTask backgroundTask = new BackgroundTask(AddVegActivity.this);
-						backgroundTask.execute("addVegItem", mGardenID, chosenVeg, affected.toString(), fullDate, vegCount, HomeActivity.global_UserID_String);
+						backgroundTask.execute("addVegItem", mGardenID, chosenVeg, affected.toString(), fullDate, vegCount, HomeActivity.global_UserID_String, lastWatered);
 					}catch (Exception e){
 						e.printStackTrace();
 					}
+
+					//ToDO: Rebuild vegItem list with newly persisted item
+					new Thread(new DBScraper_userVeg(context)).start();
+
+					//ToDo add newly planted item to the file created on user login that's filled with all veg planted by user
+					//Todo Create a JSON object, similar to how file is already composed.
+//
+//					JSONObject jsonObject = new JSONObject(); //response
+//					try {
+//						jsonObject.put("userID", HomeActivity.global_UserID_String);
+//						jsonObject.put("gardenID", mGardenID);
+//						jsonObject.put("timePlanted", fullDate);
+//						jsonObject.put("quantity", vegCount );
+//						jsonObject.put("vegName", chosenVeg );
+//						jsonObject.put("affectedByRain", affected );
+////						jsonObject.put("eta", );
+//
+//					} catch (JSONException e) {
+//						e.printStackTrace();
+//					}
+//					//write file to existing file
+//					//TODO parse file with json, drill into array, add new object, pack back into array and write to file.
+//					try {
+//					FileOutputStream fos = openFileOutput(DBScraper_userVeg.userVeg_file, MODE_APPEND);
+//						fos.write(jsonObject.toString().getBytes());
+//						fos.write("~".getBytes());
+//						fos.close();
+//					} catch (FileNotFoundException e) {
+//						e.printStackTrace();
+//					} catch (IOException e) {
+//						e.printStackTrace();
+//					}
+
 					finish();
 				}
 			}

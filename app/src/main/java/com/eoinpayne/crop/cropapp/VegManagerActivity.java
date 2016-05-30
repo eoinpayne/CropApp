@@ -17,18 +17,25 @@ import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.eoinpayne.crop.cropapp.VegItem.Priority;
 import com.eoinpayne.crop.cropapp.VegItem.Status;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class VegManagerActivity extends ListActivity {
@@ -101,6 +108,8 @@ public class VegManagerActivity extends ListActivity {
 				extras.putString("gardenID", gardenID);
 				extras.putString("userID", userID);
 				addVeg_intent.putExtras(extras);
+				//todo: get rid of double way of displaying to mAdapter? Just regular start activity?
+				//todo persist data and finish?
 				startActivityForResult(addVeg_intent, ADD_VEG_ITEM_REQUEST);
 			}
 		});
@@ -126,12 +135,13 @@ public class VegManagerActivity extends ListActivity {
 //		return daysSinceWatered;
 //	}
 
+	//todo: get rid of double way of displaying to mAdapter?
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 		log("Entered onActivityResult()");
 
-		// TODO - Check result code and  code. XX ? cancel? / reuest code?
+		// TODO - Check result code and  code. XX
 		//switch
 		switch(resultCode){
 			case RESULT_OK:
@@ -199,35 +209,125 @@ public class VegManagerActivity extends ListActivity {
 	//TODO write all these items to a file stored locally
 	//TODO when a garden is selected, scan the file and build vegItems for all lines that have a userId matching
 	//TODO add these vegItems to the adapter's list.
-	//TODO any time a new item is added/removed to garden, update the file. always build list from file?
+	//TODO any time a new item is added/removed to garden, rebuild the file. always build list from file?
 	//TODO Call this background task anytime user logs in and any time new item is added?
 	private void loadItems() {
 		BufferedReader reader = null;
+//todo: send to a background task with a load bar?
+
+
 		try {
-			FileInputStream fis = openFileInput(FILE_NAME);
+			FileInputStream fis = openFileInput(BuildFile_userVeg.userVeg_file);
 			reader = new BufferedReader(new InputStreamReader(fis));
+//			reader = new BufferedReader(new FileReader(DBScraper_userVeg.userVeg_file));
 
-			String title = null;
-//			String priority = null;
-//			String status = null;
-			Date date = null;
-			String affected = null;
-			String vegCount = null;
+			String _vegName = null;		//vegName
+			String _affected = null;  	//affected by rain
+			Date _date = null; 			 //date planted
+			String _vegCount = null;		//quantity of veg
+			Date _lastWatered = null;	//date last watered
+			String _gardenID = null;
 
-			while (null != (title = reader.readLine())) {
-//				priority = reader.readLine();
-//				status = reader.readLine();
-				affected = reader.readLine();
-				date = VegItem.FORMAT.parse(reader.readLine());
-				vegCount = reader.readLine();
-//				mAdapter.add(new VegItem(title, Priority.valueOf(priority),
-//						Status.valueOf(status), date));
-				mAdapter.add(new VegItem(title, VegItem.Affected.valueOf(affected), date, vegCount));
+			//ToDo pull json from file convert to build new veg item
+
+			//TODO: read json file and convert to string
+			String jsonString = reader.readLine();
+
+			//ToDo convert string to json array.
+			JSONArray jsonArray = new JSONArray(jsonString);
+
+			//ToDo: iterate each object in the array, make a json object, make a veg item and add to the adaptor to display as list.
+
+			for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject tempJO = jsonArray.getJSONObject(i);
+				_vegName = tempJO.get("vegName").toString();
+				_affected = tempJO.get("affectedByRain").toString();
+
+				_date = VegItem.FORMAT.parse(tempJO.get("timePlanted").toString());
+				_vegCount = tempJO.get("quantity").toString();
+
+				_lastWatered = VegItem.FORMAT.parse(tempJO.get("lastWatered").toString());
+				_gardenID = tempJO.get("gardenID").toString();
+				if (_gardenID.equals(gardenID)){
+					mAdapter.add(new VegItem(_vegName, VegItem.Affected.valueOf(_affected), _date, _vegCount, _lastWatered));
+				}
 			}
+
+////			JSONArray jsonArray = new JSONArray(reader.readLine());
+//			for (int i = 1; i < jsonObject.length(); i++) {
+//				JSONObject thisJO = jsonObject.getJSONObject(i);
+//				affected = thisJO.getString("affectedByRain");
+////				String gardenID = thisJO.getString("gardenID");
+//
+//			}
+//			JSONArray jsonArray = new JSONArray();
+//
+//			String incoming = reader.readLine();
+//
+////			incoming.split("}");
+//			for (String retval: incoming.split("[~]")){
+////				for (String retval: incoming.split("(?<=,)")){
+//
+////				System.out.println(retval);
+//				if (!(retval.equals(""))) {
+//					JSONObject tempJO = new JSONObject(retval);
+//					affected = tempJO.get("affectedByRain").toString();
+//					jsonArray.put(tempJO);
+//				}
+//			}
+
+
+
+//			jsonArray.put(incoming);
+//			for (int i = 1; i < jsonArray.length(); i++) {
+//				JSONObject thisJO = jsonArray.getJSONObject(i);
+//				affected = thisJO.getString("affectedByRain");
+////				String gardenID = thisJO.getString("gardenID");
+//
+//			}
+/////////////////
+//			String fileContent = "";
+//			try {
+//				String currentLine;
+//				File cacheFile = new File(getFilesDir(), DBScraper_userVeg.userVeg_file);
+////				FileInputStream fis = openFileInput(DBScraper_userVeg.userVeg_file);
+//				BufferedReader br = new BufferedReader(new FileReader(cacheFile));
+//
+//				while ((currentLine = br.readLine()) != null) {
+//					fileContent += currentLine + '\n';
+//				}
+//
+//				br.close();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//
+//				// on exception null will be returned
+//				fileContent = null;
+//			}
+/////////////////////
+
+//			while (null != (title = reader.readLine())) {
+////				while (reader.readLine() != null) {
+//				JSONObject jsonObject = new JSONObject(reader.readLine());
+////				priority = reader.readLine();
+////				status = reader.readLine();
+//				affected = jsonObject.get("affectedByRain").toString();
+////				date = VegItem.FORMAT.parse(reader.readLine());
+//				vegCount = reader.readLine();
+////				mAdapter.add(new VegItem(title, Priority.valueOf(priority),
+////						Status.valueOf(status), date));
+//				mAdapter.add(new VegItem(title, VegItem.Affected.valueOf(affected), date, vegCount));
+//			}
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+//		catch (ParseException e) {
+//			e.printStackTrace();
+//		}
+		catch (JSONException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {
 			e.printStackTrace();

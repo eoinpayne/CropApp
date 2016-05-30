@@ -45,6 +45,8 @@ public class VegItem {
 	public final static String AFFECTED = "affected";
 	public final static String VEGCOUNT = "vegCount";
 	public final static String DATE = "date";
+	public final static String LASTWATERED = "lastWatered";
+
 	public final static String FILENAME = "filename";
 	public final static SimpleDateFormat FORMAT = new SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
@@ -62,6 +64,16 @@ public class VegItem {
 		this.mAffected = affected;
 		this.mDate = date;
 		this.mLastWatered = date;
+		this.mVegCount = vegCount;
+
+	}
+
+	VegItem(String title, Affected affected, Date date, String vegCount, Date lastWatered) {
+		this.mTitle = title;
+//		this.mStatus = status;
+		this.mAffected = affected;
+		this.mDate = date;
+		this.mLastWatered = lastWatered;
 		this.mVegCount = vegCount;
 
 	}
@@ -151,13 +163,14 @@ public Date getLastWatered() {return mLastWatered;}
 
 //	public static void packageIntent(Intent intent, String title,
 //									 Priority priority, Status status, String date) {
-public static void packageIntent(Intent intent, String title, Affected affected, String date, String vegCount) {
+public static void packageIntent(Intent intent, String title, Affected affected, String date, String vegCount, String lastWatered) {
 
 		intent.putExtra(VegItem.TITLE, title);
 		intent.putExtra(VegItem.AFFECTED, affected.toString());
 		intent.putExtra(VegItem.DATE, date);
 		intent.putExtra(VegItem.VEGCOUNT, vegCount);
-	
+		intent.putExtra(VegItem.LASTWATERED, lastWatered);
+
 	}
 
 	public String toString() {

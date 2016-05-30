@@ -31,6 +31,9 @@ import java.net.URLEncoder;
  */
 public class DBScraper_vegInfo implements Runnable {
 
+//    String scrapeVegName_url = "http://192.168.0.34/scrapeVegName.php";
+//    String scrapeAllVegInfo_url = "http://192.168.0.34/scrapeAllVegInfo.php";
+//
     String scrapeVegName_url = "http://10.0.2.2/scrapeVegName.php";
     String scrapeAllVegInfo_url = "http://10.0.2.2/scrapeAllVegInfo.php";
     String json;
@@ -113,7 +116,8 @@ public class DBScraper_vegInfo implements Runnable {
                         //todo write in full json object of everything. then parse out after to allow choosing of "carrot"
 
                         FileOutputStream fos_vegInfo = ctx.openFileOutput(allVegInfo_file, ctx.MODE_APPEND);
-                        fos_vegInfo.write(allVegInfo.getBytes());
+//                        fos_vegInfo.write(allVegInfo.getBytes());
+                        fos_vegInfo.write(thisJO.toString().getBytes());
                         fos_vegInfo.close();
                         FileOutputStream fos_vegNames = ctx.openFileOutput(vegNames_file, ctx.MODE_APPEND);
                         fos_vegNames.write(vegName.getBytes());

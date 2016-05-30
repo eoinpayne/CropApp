@@ -177,7 +177,7 @@ public class VegListAdapter extends BaseAdapter {
 
 		});
 
-		// TODO -  Return the View you just created XX
+		// TODO -  Return the View you created XX
 		return item_layout;
 
 	} ////////////////////////////////////closes getView()

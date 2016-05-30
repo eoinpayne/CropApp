@@ -175,6 +175,9 @@ public class HomeActivity extends  AppCompatActivity {          //ListActivity {
 // ---------------------------------------------------------------------------------------------
 
     public class HomeBackgroundTask extends AsyncTask<String,Void,String> {
+//        String createGarden_URL = "http://192.168.0.34/createGarden.php";
+//        String displayGarden_URL = "http://192.168.0.34/displayGardens.php";
+
         String createGarden_URL = "http://10.0.2.2/createGarden.php";
         String displayGarden_URL = "http://10.0.2.2/displayGardens.php";
         AlertDialog.Builder builder;  //we can initialise in onPreExecute method
