@@ -159,7 +159,6 @@ public class AddVegActivity extends Activity {  //appcompat?
 
 				// Package vegItem data into an Intent
 				Intent data = new Intent();
-//				VegItem.packageIntent(data, titleString, priority, status, fullDate);
 
 				if ((vegSpinner.getSelectedItem().toString()) == null)
 				{
@@ -169,47 +168,25 @@ public class AddVegActivity extends Activity {  //appcompat?
 				else
 				{
 					chosenVeg = vegSpinner.getSelectedItem().toString(); //vegSpinner
-					VegItem.packageIntent(data, chosenVeg, affected, fullDate, vegCount, lastWatered);
-					setResult(Activity.RESULT_OK, data);
+//					VegItem.packageIntent(data, chosenVeg, affected, fullDate, vegCount, lastWatered);
+//					setResult(Activity.RESULT_OK, data);
 					//todo persists data to the database
 					try {
-						BackgroundTask backgroundTask = new BackgroundTask(AddVegActivity.this);
-						backgroundTask.execute("addVegItem", mGardenID, chosenVeg, affected.toString(), fullDate, vegCount, HomeActivity.global_UserID_String, lastWatered);
+						AddVeg_BackgroundTask addVeg_backgroundTask = new AddVeg_BackgroundTask(AddVegActivity.this);
+//						BackgroundTask backgroundTask = new BackgroundTask(AddVegActivity.this);
+						addVeg_backgroundTask.execute("addVegItem", mGardenID, chosenVeg, affected.toString(), fullDate, vegCount, HomeActivity.global_UserID_String, lastWatered);
 					}catch (Exception e){
 						e.printStackTrace();
 					}
 
 					//ToDO: Rebuild vegItem list with newly persisted item
-					new Thread(new DBScraper_userVeg(context)).start();
+//					new Thread(new DBScraper_userVeg(context)).start();
 
-					//ToDo add newly planted item to the file created on user login that's filled with all veg planted by user
-					//Todo Create a JSON object, similar to how file is already composed.
-//
-//					JSONObject jsonObject = new JSONObject(); //response
-//					try {
-//						jsonObject.put("userID", HomeActivity.global_UserID_String);
-//						jsonObject.put("gardenID", mGardenID);
-//						jsonObject.put("timePlanted", fullDate);
-//						jsonObject.put("quantity", vegCount );
-//						jsonObject.put("vegName", chosenVeg );
-//						jsonObject.put("affectedByRain", affected );
-////						jsonObject.put("eta", );
-//
-//					} catch (JSONException e) {
-//						e.printStackTrace();
-//					}
-//					//write file to existing file
-//					//TODO parse file with json, drill into array, add new object, pack back into array and write to file.
-//					try {
-//					FileOutputStream fos = openFileOutput(DBScraper_userVeg.userVeg_file, MODE_APPEND);
-//						fos.write(jsonObject.toString().getBytes());
-//						fos.write("~".getBytes());
-//						fos.close();
-//					} catch (FileNotFoundException e) {
-//						e.printStackTrace();
-//					} catch (IOException e) {
-//						e.printStackTrace();
-//					}
+					try {
+						Thread.sleep(1100);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 
 					finish();
 				}
@@ -223,12 +200,6 @@ public class AddVegActivity extends Activity {  //appcompat?
 		JSONArray jsonArray = null;
 		ArrayList<String> vegList = new ArrayList<>();
 		try {
-//			InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-//			InputStream inputStream = getResources().getAssets().open(filename);
-
-//			String yourFilePath = context.getFilesDir() + "/" + "filename";
-//			File myVegNames_file = new File( yourFilePath );
-
 			FileInputStream fileInputStream = openFileInput(DBScraper_vegInfo.vegNames_file);
 			InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
 			BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
@@ -239,20 +210,6 @@ public class AddVegActivity extends Activity {  //appcompat?
 				vegList.add(line);
 			}
 			String data = stringBuilder.toString().trim();
-
-//			int size = inputStreamReader.available();
-//			byte[] data = new byte[size];
-//			inputStream.read(data);
-//			inputStream.close();
-
-//			JSONObject json = new JSONObject(data);
-//			jsonArray= json.getJSONArray("server_response");
-//			if(jsonArray != null){
-//				for(int i =0; i <jsonArray.length();i++){
-//					vegList.add(jsonArray.getJSONObject(i).getString("vegName"));
-//				}
-//			}
-
 		}catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -56,6 +56,7 @@ public class VegItem {
 	private Date mDate;
 	private Date mLastWatered;
 	private String mVegCount;
+	private String mGardenVegID;
 
 
 	VegItem(String title, Affected affected, Date date, String vegCount) {
@@ -68,36 +69,37 @@ public class VegItem {
 
 	}
 
-	VegItem(String title, Affected affected, Date date, String vegCount, Date lastWatered) {
+	VegItem(String title, Affected affected, Date date, String vegCount, Date lastWatered, String gardenVegID) {
 		this.mTitle = title;
 //		this.mStatus = status;
 		this.mAffected = affected;
 		this.mDate = date;
 		this.mLastWatered = lastWatered;
 		this.mVegCount = vegCount;
+		this.mGardenVegID = gardenVegID;
 
 	}
 
 	// Create a new vegItem from data packaged in an Intent
-	VegItem(Intent intent) {
-		mTitle = intent.getStringExtra(VegItem.TITLE);
-		mAffected = Affected.valueOf(intent.getStringExtra(VegItem.AFFECTED));
-		mVegCount =  intent.getStringExtra(VegItem.VEGCOUNT);
-//		mStatus = Status.valueOf(intent.getStringExtra(VegItem.STATUS));
-
-		try {
-			mDate = VegItem.FORMAT.parse(intent.getStringExtra(VegItem.DATE));
-
-		} catch (ParseException e) {
-			mDate = new Date();
-		}
-		try {
-			mLastWatered = VegItem.FORMAT.parse(intent.getStringExtra(VegItem.DATE));
-		} catch (ParseException e) {
-			mLastWatered = new Date();
-		}
-
-	} // Close VegItem from intent
+//	VegItem(Intent intent) {
+//		mTitle = intent.getStringExtra(VegItem.TITLE);
+//		mAffected = Affected.valueOf(intent.getStringExtra(VegItem.AFFECTED));
+//		mVegCount =  intent.getStringExtra(VegItem.VEGCOUNT);
+////		mStatus = Status.valueOf(intent.getStringExtra(VegItem.STATUS));
+//
+//		try {
+//			mDate = VegItem.FORMAT.parse(intent.getStringExtra(VegItem.DATE));
+//
+//		} catch (ParseException e) {
+//			mDate = new Date();
+//		}
+//		try {
+//			mLastWatered = VegItem.FORMAT.parse(intent.getStringExtra(VegItem.DATE));
+//		} catch (ParseException e) {
+//			mLastWatered = new Date();
+//		}
+//
+//	} // Close VegItem from intent
 
 	public String getTitle() {
 		return mTitle;
@@ -150,6 +152,14 @@ public class VegItem {
 		mVegCount = vegCount;
 	}
 
+	public String getGardenVegID() {
+		return mGardenVegID;
+	}
+
+	public void setGardenVegID(String gardenVegID) {
+		mGardenVegID = gardenVegID;
+	}
+
 
 public Date getLastWatered() {return mLastWatered;}
 
@@ -163,15 +173,15 @@ public Date getLastWatered() {return mLastWatered;}
 
 //	public static void packageIntent(Intent intent, String title,
 //									 Priority priority, Status status, String date) {
-public static void packageIntent(Intent intent, String title, Affected affected, String date, String vegCount, String lastWatered) {
-
-		intent.putExtra(VegItem.TITLE, title);
-		intent.putExtra(VegItem.AFFECTED, affected.toString());
-		intent.putExtra(VegItem.DATE, date);
-		intent.putExtra(VegItem.VEGCOUNT, vegCount);
-		intent.putExtra(VegItem.LASTWATERED, lastWatered);
-
-	}
+//public static void packageIntent(Intent intent, String title, Affected affected, String date, String vegCount, String lastWatered) {
+//
+//		intent.putExtra(VegItem.TITLE, title);
+//		intent.putExtra(VegItem.AFFECTED, affected.toString());
+//		intent.putExtra(VegItem.DATE, date);
+//		intent.putExtra(VegItem.VEGCOUNT, vegCount);
+//		intent.putExtra(VegItem.LASTWATERED, lastWatered);
+//
+//	}
 
 	public String toString() {
 		return mTitle + ITEM_SEP + mAffected + ITEM_SEP + mStatus + ITEM_SEP

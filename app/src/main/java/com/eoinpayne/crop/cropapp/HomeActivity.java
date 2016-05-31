@@ -47,7 +47,7 @@ public class HomeActivity extends  AppCompatActivity {          //ListActivity {
     Button updateButton;
     Button createGardenButton;
     ListView gardenListView;
-    public ArrayList<Garden> json_gardens= new ArrayList<>();
+    public ArrayList<Garden> mGardens = new ArrayList<>();
     public ArrayAdapter<Garden> adapter;  //could use cursosr adaptor for db?
 
 //    AlertDialog.Builder builder;  //we can initialise in onPreExecute method
@@ -70,17 +70,11 @@ public class HomeActivity extends  AppCompatActivity {          //ListActivity {
         global_UserID_String = Integer.toString(userID);
         textView.setText(message);
 
-
-
-
-
         input = new EditText(HomeActivity.this);
         gardenListView = (ListView) findViewById(R.id.garden_list);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, json_gardens);
-//        adapter.add("test");
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mGardens);
         gardenListView.setAdapter(adapter);
         new HomeBackgroundTask().execute("display_gardens", UserID_String);
-
 
 
 //        //move to on create and have this button to refresh?
@@ -105,12 +99,84 @@ public class HomeActivity extends  AppCompatActivity {          //ListActivity {
         //// LOAD GARDEN
         gardenListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            public boolean onItemLongClick(final AdapterView<?> parent, View view, final int position, long id) {
+
+                final Garden selected_garden = (Garden)parent.getItemAtPosition(position);
                 //TODO delete garden item and remove from DB on long click
-                Toast.makeText(getBaseContext(),parent.getItemAtPosition(position) +" is to be deleted", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getBaseContext(),parent.getItemAtPosition(position) +" is to be deleted", Toast.LENGTH_LONG).show();
+
+
+                new AlertDialog.Builder(parent.getContext())
+                        .setTitle("Delete Garden") // set as strings item Delete
+                        .setMessage("Are you sure?")
+                        .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    AddVeg_BackgroundTask addVeg_backgroundTask = new AddVeg_BackgroundTask(HomeActivity.this);
+                                    addVeg_backgroundTask.execute("deleteGarden", selected_garden.getGardenID());
+                                }catch (Exception e){
+                                    e.printStackTrace();
+                                }
+                                mGardens.remove(selected_garden);
+                                adapter.notifyDataSetChanged();
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+
+
+
                 return true;
             }
         });
+
+
+
+
+//        item_layout.setOnLongClickListener(new View.OnLongClickListener() {  //creating an annoymous inner class
+//            @Override
+//            public boolean onLongClick(View v) {
+//                new AlertDialog.Builder(parent.getContext())
+//                        .setTitle("Delete Item") // set as strings item Delete
+//                        .setMessage("Are you sure?")
+//                        .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                try {
+//                                    AddVeg_BackgroundTask addVeg_backgroundTask = new AddVeg_BackgroundTask(mContext);
+//                                    addVeg_backgroundTask.execute("deleteVegItem", vegItem.getGardenVegID());
+//                                }catch (Exception e){
+//                                    e.printStackTrace();
+//                                }
+//                                mItems.remove(vegItem);
+//                                notifyDataSetChanged();
+//                            }
+//                        })
+//                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                dialog.cancel();
+//                            }
+//                        })
+//                        .setIcon(android.R.drawable.ic_dialog_alert)
+//                        .show();
+//
+//                return true;
+//            }
+//
+//        });
+
+
+
+
+
+
+
+
+
 
         //// LOAD GARDEN
         gardenListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -119,25 +185,13 @@ public class HomeActivity extends  AppCompatActivity {          //ListActivity {
                 Toast.makeText(getBaseContext(),parent.getItemAtPosition(position) +" is selected", Toast.LENGTH_LONG).show();
 
                 Garden selected_garden = (Garden)parent.getItemAtPosition(position);
-//                String selected_garden_str = selected_garden.toString();
-
-//                int userID = JO.getInt("userID");
-//                String userID_STR = JO.getString("userID");
-//                HomeActivity.global_userID = userID;
-//                String str_userID = JO.getString("userID");
-
-
-//                String selectedGarden = parent.getItemAtPosition(position);
-
-//                Intent intent = new Intent(HomeActivity.this, GardenActivity.class );
                 Intent intent = new Intent(HomeActivity.this, VegManagerActivity.class );
                 Bundle extras = new Bundle();
-//                extras.putString("message", message);  //pass garden name for @+id/garden_title"
                 extras.putString("gardenName", selected_garden.getGardenName());
                 extras.putString("gardenID", selected_garden.getGardenID());
                 extras.putString("userID", selected_garden.getUserID());
                 intent.putExtras(extras);
-                startActivity(intent);
+                startActivity(intent); //starts VegManagerActivity
 
             }
         });
@@ -319,7 +373,7 @@ public class HomeActivity extends  AppCompatActivity {          //ListActivity {
                         String userID = UserID_String;
                         Garden tempGarden = new Garden(gardenName,gardenID,userID );
 //                        String tempGarden = "GardenID: " + thisJO.getString("gardenID") +  ".   Garden Name: " + thisJO.getString("gardenName");
-                        json_gardens.add(tempGarden);
+                        mGardens.add(tempGarden);
                         adapter.notifyDataSetChanged();
                     } //for int i =1
                 }
@@ -334,7 +388,7 @@ public class HomeActivity extends  AppCompatActivity {          //ListActivity {
                     String userID = UserID_String;
                     Garden newGarden = new Garden(gardenName,gardenID,userID );
 //                        String newGarden = "GardenID: " + JO.getString("gardenID") +  ".   Garden Name: " + JO.getString("gardenName");
-                    json_gardens.add(newGarden);
+                    mGardens.add(newGarden);
                     adapter.notifyDataSetChanged();
                 }
                 else if (code.equals("garden_exists")){

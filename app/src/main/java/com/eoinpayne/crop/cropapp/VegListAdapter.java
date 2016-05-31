@@ -160,6 +160,12 @@ public class VegListAdapter extends BaseAdapter {
 						.setMessage("Are you sure?")
 						.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int which) {
+								try {
+									AddVeg_BackgroundTask addVeg_backgroundTask = new AddVeg_BackgroundTask(mContext);
+									addVeg_backgroundTask.execute("deleteVegItem", vegItem.getGardenVegID());
+								}catch (Exception e){
+									e.printStackTrace();
+								}
 								mItems.remove(vegItem);
 								notifyDataSetChanged();
 							}

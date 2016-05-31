@@ -41,17 +41,10 @@ public class DBScraper_userVeg implements Runnable {
 
         //todo delete file
         try {
-//            File dir = ctx.getFilesDir();
-//            File allVegInfo_file_delete = new File(dir, userVeg_file);
-//            File vegNames_file_delete = new File(dir, userVeg_file);
-//            deleted1 = allVegInfo_file_delete.delete();
-//            deleted2 = vegNames_file_delete.delete();
             deleted1 = ctx.deleteFile(userVeg_file);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
 
 
         // Move current thread into the background
