@@ -14,24 +14,24 @@ public class VegItem {
 
 	public static final String ITEM_SEP = System.getProperty("line.separator");
 
-	public enum Priority {
-		LOW(2), MED(1), HIGH(0);
-		private final int position;
-		Priority(int position){
-			this.position= position;
-		}
-		public static Priority valueFromPosition(int position){
-			for (Priority priority: values()){
-				if (priority.position == position){
-					return priority;
-				}
-			}
-			return LOW;
-		}
-		public int getPosition(){
-			return position;
-		}
-	};
+//	public enum Priority {
+//		LOW(2), MED(1), HIGH(0);
+//		private final int position;
+//		Priority(int position){
+//			this.position= position;
+//		}
+//		public static Priority valueFromPosition(int position){
+//			for (Priority priority: values()){
+//				if (priority.position == position){
+//					return priority;
+//				}
+//			}
+//			return LOW;
+//		}
+//		public int getPosition(){
+//			return position;
+//		}
+//	};
 
 	public enum Status {
 		NOTDONE, DONE
@@ -50,6 +50,8 @@ public class VegItem {
 	public final static String FILENAME = "filename";
 	public final static SimpleDateFormat FORMAT = new SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+	public final static SimpleDateFormat FORMATLONG = new SimpleDateFormat(
+			"EE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
 	private String mTitle = new String();
 	private Affected mAffected = Affected.YES;
 	private Status mStatus = Status.NOTDONE;
@@ -161,11 +163,13 @@ public class VegItem {
 	}
 
 
-public Date getLastWatered() {return mLastWatered;}
+	public Date getLastWatered() {return mLastWatered;}
 
-	public void setLastWatered() {
-		Calendar c = Calendar.getInstance();
-		mLastWatered = c.getTime();
+	public void setLastWatered(Date currentDate) {
+//		Calendar c = Calendar.getInstance();
+//		mLastWatered = c.getTime();
+		mLastWatered = currentDate;
+		//ToDo format?
 	}
 
 	// Take a set of String data values and 

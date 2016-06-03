@@ -49,6 +49,10 @@ public class AddVeg_BackgroundTask extends AsyncTask<String,Void,String> {
     String addVegItem_url = "http://10.0.2.2/addVeg.php";
     String deleteVegItem_url = "http://10.0.2.2/deleteVeg.php";
     String deleteGarden_url = "http://10.0.2.2/deleteGarden.php";
+    String waterSingle_url = "http://10.0.2.2/waterSingle.php";
+    String waterAll_url = "http://10.0.2.2/waterAll.php";
+
+
     Context ctx;
 //    Activity activity;
     AlertDialog.Builder builder;  //we can initialise in onPreExecute method
@@ -94,7 +98,7 @@ public class AddVeg_BackgroundTask extends AsyncTask<String,Void,String> {
 //                httpURLConnection.setDoOutput(true);
                 OutputStream outputStream = httpURLConnection.getOutputStream();
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-                String gardenID, userID, vegName, affectedByRain, datePlanted, vegCount, lastWatered;
+                String gardenID, userID, vegName, affectedByRain, datePlanted, vegCount, lastWatered, eta;
 //                userID = params[1];
                 gardenID = params[1];
                 vegName = params[2];
@@ -103,6 +107,7 @@ public class AddVeg_BackgroundTask extends AsyncTask<String,Void,String> {
                 vegCount = params[5];
                 userID = params[6];
                 lastWatered = params[7];
+                eta = params[7]; //expectedHarvestDate
                 //ToDo pass through the estaimted harvest date
 //                int eta =
                 String data = URLEncoder.encode("gardenID", "UTF-8") + "=" + URLEncoder.encode(gardenID,"UTF-8" )
@@ -111,8 +116,8 @@ public class AddVeg_BackgroundTask extends AsyncTask<String,Void,String> {
                         + "&" + URLEncoder.encode("affectedByRain", "UTF-8") + "=" + URLEncoder.encode(affectedByRain,"UTF-8" )
                         + "&" + URLEncoder.encode("datePlanted", "UTF-8") + "=" + URLEncoder.encode(datePlanted,"UTF-8")
                         + "&" + URLEncoder.encode("vegCount", "UTF-8") + "=" + URLEncoder.encode(vegCount,"UTF-8")
-                        + "&" + URLEncoder.encode("lastWatered", "UTF-8") + "=" + URLEncoder.encode(lastWatered,"UTF-8");
-//                        + "&" + URLEncoder.encode("eta", "UTF-8") + "=" + URLEncoder.encode(eta,"UTF-8") ;
+                        + "&" + URLEncoder.encode("lastWatered", "UTF-8") + "=" + URLEncoder.encode(lastWatered,"UTF-8")
+                        + "&" + URLEncoder.encode("eta", "UTF-8") + "=" + URLEncoder.encode(eta,"UTF-8") ; //expectedHarvestDate
                 bufferedWriter.write(data);  //pass data string
                 bufferedWriter.flush();
                 bufferedWriter.close();
@@ -131,7 +136,7 @@ public class AddVeg_BackgroundTask extends AsyncTask<String,Void,String> {
 //                Thread.sleep(1200);
 //                Log.i();
                 //ToDo: finish?
-//                return stringBuilder.toString().trim(); //return string builder in normal string format
+                return stringBuilder.toString().trim(); //return string builder in normal string format
 
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -202,6 +207,108 @@ public class AddVeg_BackgroundTask extends AsyncTask<String,Void,String> {
         {
             try {
                 URL url = new URL(deleteGarden_url);
+                HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+                httpURLConnection.setRequestMethod("POST"); //?
+                httpURLConnection.setDoInput(true);
+//                httpURLConnection.setDoOutput(true);
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                String gardenID;
+                gardenID = params[1];
+
+                //ToDo pass through the estaimted harvest date
+                String data = URLEncoder.encode("gardenID", "UTF-8") + "=" + URLEncoder.encode(gardenID,"UTF-8");
+//                        + "&" + URLEncoder.encode("eta", "UTF-8") + "=" + URLEncoder.encode(eta,"UTF-8") ;
+                bufferedWriter.write(data);  //pass data string
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                outputStream.close();
+                //now to get the response FROM the server. (in Json, needs to be decoded)
+                InputStream inputStream = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder stringBuilder = new StringBuilder(); //to read JSON response from bufferedReader
+                String line = "";  //take each line from reader and append to String.
+                while ((bufferedReader.readLine()) != null)///
+                { line = bufferedReader.readLine();
+                    stringBuilder.append(line+"\n");
+                }
+                //create a pause between background methods
+                httpURLConnection.disconnect(); //close conenction
+                Thread.sleep(800);
+//                Log.i();
+                //ToDo: finish?
+                return stringBuilder.toString().trim(); //return string builder in normal string format
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            catch (InterruptedException e) {
+                e.printStackTrace();       }
+        }   //close login else if
+
+
+        ////////////////// Water Single Veg //////////////////////
+        else if (method.equals("waterSingle"))
+        {
+            try {
+                URL url = new URL(waterSingle_url);
+                HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+                httpURLConnection.setRequestMethod("POST"); //?
+                httpURLConnection.setDoInput(true);
+//                httpURLConnection.setDoOutput(true);
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                String gardenVegID, currentDate;
+                gardenVegID = params[1];
+                currentDate = params[2];
+
+                //ToDo pass through the estaimted harvest date
+                String data = URLEncoder.encode("gardenVegID", "UTF-8") + "=" + URLEncoder.encode(gardenVegID,"UTF-8")
+                        + "&" + URLEncoder.encode("currentDate", "UTF-8") + "=" + URLEncoder.encode(currentDate,"UTF-8");
+                bufferedWriter.write(data);  //pass data string
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                outputStream.close();
+                //now to get the response FROM the server. (in Json, needs to be decoded)
+                InputStream inputStream = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder stringBuilder = new StringBuilder(); //to read JSON response from bufferedReader
+                String line = "";  //take each line from reader and append to String.
+                while ((bufferedReader.readLine()) != null)///
+                { line = bufferedReader.readLine();
+                    stringBuilder.append(line+"\n");
+                }
+                //create a pause between background methods
+                httpURLConnection.disconnect(); //close conenction
+                Thread.sleep(800);
+//                Log.i();
+                //ToDo: finish?
+                return stringBuilder.toString().trim(); //return string builder in normal string format
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            catch (InterruptedException e) {
+                e.printStackTrace();       }
+        }   //close login else if
+
+        ////////////////// Water All  Veg //////////////////////
+        else if (method.equals("waterAll"))
+        {
+            try {
+                URL url = new URL(waterAll_url);
                 HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
                 httpURLConnection.setRequestMethod("POST"); //?
                 httpURLConnection.setDoInput(true);

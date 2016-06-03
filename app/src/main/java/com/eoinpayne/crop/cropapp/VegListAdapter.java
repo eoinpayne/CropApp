@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -109,8 +110,18 @@ public class VegListAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				Toast.makeText(mContext,"WATERED SINGLE!!", Toast.LENGTH_LONG).show();
-				vegItem.setLastWatered();
+				vegItem.setLastWatered(GetCurrentDate());
+
+				//ToDo persist to DB
+				try {
+					AddVeg_BackgroundTask waterSingle_backgroundTask = new AddVeg_BackgroundTask(mContext);
+					waterSingle_backgroundTask.execute("waterSingle", vegItem.getGardenVegID(), GetCurrentDate().toString());
+				}catch (Exception e){
+					e.printStackTrace();
+				}
+
 				checkWater(vegItem, waterCountView);
+
 
 			}
 		});
@@ -214,14 +225,6 @@ public class VegListAdapter extends BaseAdapter {
 //		return daysSinceWatered;
 //	}
 
-	public int getDaysWatered(VegItem vegItem) {
-		Calendar c = Calendar.getInstance();
-		Date now = c.getTime();
-
-		int daysSinceWatered = VegListAdapter.getDaysDifference(vegItem.getLastWatered(), now);
-
-		return daysSinceWatered;
-	}
 
 	public void checkWater(VegItem vegItem, TextView waterCountView){
 //		waterCountView.setText(String.valueOf(vegItem.getLastWatered()));
@@ -229,7 +232,22 @@ public class VegListAdapter extends BaseAdapter {
 
 	}
 
+	public int getDaysWatered(VegItem vegItem) {
+//		Calendar c = Calendar.getInstance();
+		Date now = GetCurrentDate();
 
+		int daysSinceWatered = getDaysDifference(vegItem.getLastWatered(), now);
+
+		return daysSinceWatered;
+	}
+
+	public static int getDaysDifference(Date fromDate, Date toDate)
+	{
+		if(fromDate==null||toDate==null)
+			return 0;
+
+		return (int)( (toDate.getTime() - fromDate.getTime()) / (1000 * 60 * 60 * 24));
+	}
 
 	//ToDO: EXTRA WORK 1 - cyan/magenta
 	public void checkColour(VegItem vegItem, View item_layout ){
@@ -241,13 +259,7 @@ public class VegListAdapter extends BaseAdapter {
 	} //closes check colour
 
 
-	public static int getDaysDifference(Date fromDate, Date toDate)
-	{
-		if(fromDate==null||toDate==null)
-			return 0;
 
-		return (int)( (toDate.getTime() - fromDate.getTime()) / (1000 * 60 * 60 * 24));
-	}
 
 //	//ToDo: EXTRA WORK 2 - Modify textcolor
 //	public void changeTextColour(VegItem vegItem, TextView titleView ){ //View item_layout
@@ -263,6 +275,39 @@ public class VegListAdapter extends BaseAdapter {
 //			titleView.setTextColor(Color.YELLOW);
 //		}
 //	}
+
+	public static Date GetCurrentDate(){
+		Calendar c = Calendar.getInstance();
+		Date currentDate = null;
+		try {
+			//todo  format?
+			Date now = c.getTime();
+			String formattedDate =  VegItem.FORMAT.format(now);
+			Date parsedDate =  VegItem.FORMAT.parse(formattedDate);
+			String test_date = "2016-05-23 14:56:00";
+			Date test_parse =  VegItem.FORMAT.parse(test_date);
+
+
+//			currentDate = VegItem.FORMAT.parse(now.toString());
+			return now;
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static String GetCurrentDate_String(){
+		Calendar c = Calendar.getInstance();
+		Date now = c.getTime();
+		String formattedDate =  VegItem.FORMAT.format(now);
+		try {
+			String currentDate_string = VegItem.FORMAT.parse(c.getTime().toString()).toString();
+			return currentDate_string;
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return formattedDate;
+	}
 
 	private void log(String msg) {
 		try {

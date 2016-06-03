@@ -1,12 +1,13 @@
 package com.eoinpayne.crop.cropapp;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 /**
  * Created by Hefty Balls on 12/05/2016.
  */
-public class GardenActivity extends AppCompatActivity {
+public class GardenActivity extends Activity {
 
 
     @Override

@@ -1,5 +1,6 @@
 package com.eoinpayne.crop.cropapp;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputType;
 import android.view.View;
@@ -38,8 +40,9 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-public class HomeActivity extends  AppCompatActivity {          //ListActivity {
+public class HomeActivity extends AppCompatActivity {          //ListActivity {
 
+    private Toolbar toolbar;
     public static int global_userID;
     public static String global_UserID_String;
     public String UserID_String = Integer.toString(global_userID); ///////****/////
@@ -59,6 +62,8 @@ public class HomeActivity extends  AppCompatActivity {          //ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        toolbar = (Toolbar)findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
         context = this;
 
         //displaying message we passed through with intent "message" in post activity of background task
@@ -68,7 +73,7 @@ public class HomeActivity extends  AppCompatActivity {          //ListActivity {
         int userID = bundle.getInt("userID");
         global_userID = userID;
         global_UserID_String = Integer.toString(userID);
-        textView.setText(message);
+//        textView.setText(message);
 
         input = new EditText(HomeActivity.this);
         gardenListView = (ListView) findViewById(R.id.garden_list);

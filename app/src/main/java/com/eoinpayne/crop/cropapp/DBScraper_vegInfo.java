@@ -19,12 +19,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Hashtable;
 
 /**
  * Created by Hefty Balls on 21/05/2016.
@@ -39,9 +42,12 @@ public class DBScraper_vegInfo implements Runnable {
     String json;
     final public static String allVegInfo_file = "veg_info.txt";
     final public static String vegNames_file = "veg_names.txt";
+    final public static String daysToGrow_file = "days_to_grow.txt";
+
     Context ctx;
     boolean deleted1;
     boolean deleted2;
+    Hashtable daysToGrow_hash;
 
     public DBScraper_vegInfo(Context current){
         ctx = current;
@@ -51,6 +57,7 @@ public class DBScraper_vegInfo implements Runnable {
     public void run() {
         // Move current thread into the background
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+
 
         try {
 //            File dir = ctx.getFilesDir();
@@ -103,6 +110,7 @@ public class DBScraper_vegInfo implements Runnable {
 
             //////////// Decode JSON response ////////////////
             try {
+                daysToGrow_hash = new Hashtable();
                 JSONObject jsonObject = new JSONObject(json);  //get Json object
                 JSONArray jsonArray = jsonObject.getJSONArray("server_response");  //get objects' array
                 JSONObject JO = jsonArray.getJSONObject(0); //get inner object from array at index 0
@@ -112,6 +120,16 @@ public class DBScraper_vegInfo implements Runnable {
                     String allVegInfo = "VegID: " + thisJO.getString("vID") + ".   Veg Name: " + thisJO.getString("vegName")
                             + ".   Preferred Soil: " + thisJO.getString("pSoilType") + thisJO.getString("pSoilType");
                     String vegName = thisJO.getString("vegName") + "\n";
+                    String vegName_hash = thisJO.getString("vegName");
+                    int averageDaysToGrow = (thisJO.getInt("avgDaysToGrow"));
+
+////                    String averageDaysToGrow = null;
+//                    try {
+////                        averageDaysToGrow = Integer.parseInt(thisJO.getInt("avgDaysToGrow"));
+//
+//                    }catch (Exception e){
+//                        e.printStackTrace();
+//                    }
                     try {
                         //todo write in full json object of everything. then parse out after to allow choosing of "carrot"
 
@@ -122,32 +140,64 @@ public class DBScraper_vegInfo implements Runnable {
                         FileOutputStream fos_vegNames = ctx.openFileOutput(vegNames_file, ctx.MODE_APPEND);
                         fos_vegNames.write(vegName.getBytes());
                         fos_vegNames.close();
+
+                        //ToDo add each key/value pair to hash table
+
+                        daysToGrow_hash.put(vegName_hash, averageDaysToGrow);
+
+
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
-
-                    //write name to one file
-                    //write all to rest
                 } //for int i =1
 
+                //ToDo add completed hash table to it's file
+//                daysToGrow_file
+//                FileOutputStream fos_daysToGrow = null;
+//                try {
+//                    fos_daysToGrow = ctx.openFileOutput(daysToGrow_file, ctx.MODE_APPEND);
+////                        fos_vegInfo.write(allVegInfo.getBytes());
+//                    fos_daysToGrow.write(daysToGrow_hash.toString().getBytes());
+//                    fos_daysToGrow.close();
+//                } catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
 
-//                String code = JO.getString("code");  //from server
-//                String message = JO.getString("message");
+
+
+//                saveDaysToGrow(daysToGrow_hash, daysToGrow_file);
+
+
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
+//                String code = JO.getString("code");  //from server
+//                String message = JO.getString("message");
 
             //ToDo get all veg names write to file, if old list is same as last list then replace and do nothing?
-
-
             //ToDo if lists don't match, scrape for All info and rebuild that list. (set a bool?)
 
 //        } //close if deleted 1 && 2
+    }
+
+    public void saveDaysToGrow(Serializable object, String file){
+        try {
+            FileOutputStream saveFile = ctx.openFileOutput(file, ctx.MODE_APPEND);
+
+//            FileOutputStream saveFile = new FileOutputStream(file);
+            ObjectOutputStream out = new ObjectOutputStream(saveFile);
+            out.writeObject(object);
+//            out.flush();
+            out.close();
+//            saveFile.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void readMessage (){

@@ -1,25 +1,41 @@
+<!--for devices 5.0 and lower-->
+
 <resources>
 
     <!-- Base application theme. -->
     <!--<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+
+    <!--<style name="AppTheme" parent="android:Theme.Material.Light.NoActionBar">-->
+        <!--&lt;!&ndash; Customize your theme here. &ndash;&gt; </style>-->
+
+
+    <style name="AppTheme" parent="AppTheme.Base">
+        <!-- Customize your theme here. --> </style>
+
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowActionBar">false</item>z
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowActionBarOverlay">false</item>
+        <!--<item name="android:background">@color/colorPrimary</item>-->
 
     </style>
+
     <style name="AppThemeB" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:background">@color/colorPrimary</item>
-
+        <item name="windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <!--<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />-->
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <!--<style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />-->
 
 </resources>

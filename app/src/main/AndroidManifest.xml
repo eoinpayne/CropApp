@@ -34,8 +34,10 @@
 
         <activity
             android:name=".VegManagerActivity"
-            android:theme="@style/AppThemeB"
+            android:theme="@style/AppTheme"
              />
+        <!--android:theme="@style/AppThemeB"-->
+
         <activity
             android:name=".AddVegActivity"
             android:theme="@style/AppTheme"

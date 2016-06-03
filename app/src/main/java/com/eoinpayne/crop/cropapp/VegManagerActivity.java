@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,8 +32,12 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,7 +45,7 @@ import org.json.JSONObject;
 
 public class VegManagerActivity extends ListActivity {
 	//extend one of the built-in layouts and inflate custom layout during initialization:
-
+	private Toolbar toolbar;
 	Button plantVeg;
 	Button waterAll;
 	// Add a vegItem Request Code
@@ -59,6 +64,9 @@ public class VegManagerActivity extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+//		toolbar = (Toolbar)findViewById(R.id.my_toolbar);
+//		setSupportActionBar(toolbar);
 
 		// Create a new VegListAdapter for this ListActivity's ListView
 		mAdapter = new VegListAdapter(getApplicationContext()); //mContext instead of getApplicationContect()?
@@ -196,7 +204,7 @@ public class VegManagerActivity extends ListActivity {
 ////		BufferedReader reader = null;
 //////todo: send to a background task with a load bar?
 ////		try {
-////			FileInputStream fis = openFileInput(BuildFile_userVeg.userVeg_file);
+//			FileInputStream fis = openFileInput(BuildFile_userVeg.userVeg_file);
 ////			reader = new BufferedReader(new InputStreamReader(fis));
 //////			reader = new BufferedReader(new FileReader(DBScraper_userVeg.userVeg_file));
 ////			String _vegName = null;		//vegName
@@ -273,6 +281,9 @@ public class VegManagerActivity extends ListActivity {
 //			}
 //		}
 //	}
+
+
+
 
 	private void log(String msg) {
 		try {
@@ -414,11 +425,50 @@ public class VegManagerActivity extends ListActivity {
 //						String _gardenID = thisJO.getString("gardenID");
 						String _vegName = thisJO.get("vegName").toString();
 						String _affected = thisJO.get("affectedByRain").toString();
-						Date _date = VegItem.FORMAT.parse(thisJO.get("timePlanted").toString());
+						//todo format date coming in?
+						Date _date = VegItem.FORMATLONG.parse(thisJO.get("timePlanted").toString());
+						Date _lastWatered = VegItem.FORMATLONG.parse(thisJO.get("lastWatered").toString());
+//						Date _date = null;
+//						Date _lastWatered = null;
+////						try {
+//							Date in_date = (Date) thisJO.get("timePlanted");
+//						} catch (Exception e){
+//							e.printStackTrace();
+//						}
+//						try {
+////							_lastWatered = VegItem.FORMAT.format(thisJO.get("lastWatered"));
+//							String string_date = thisJO.get("timePlanted").toString();
+//							_date = VegItem.FORMATLONG.parse(string_date); //crashes?
+//						} catch (Exception e){
+//							e.printStackTrace();
+//						}
+//						try {
+//							_lastWatered = VegItem.FORMATLONG.parse(thisJO.get("lastWatered").toString());
+//						} catch (Exception e){
+//							e.printStackTrace();
+//						}
+
+//						String string_date = thisJO.get("timePlanted").toString();
+//						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH);
+//						LocalDate date = LocalDate.parse(string, formatter);
+//						System.out.println(date); // 2010-01-02
+
+//						String string_date = thisJO.get("timePlanted").toString();
+//						DateFormat format = new SimpleDateFormat("EE MMM dd HH:mm:ss z", Locale.ENGLISH);
+//						Date date = null;
+//						try {
+//							date = format.parse(string_date);
+//						} catch (ParseException e) {
+//							e.printStackTrace();
+//						}
+//						System.out.println(date); // Sat Jan 02 00:00:00 GMT 2010
+
 						String _vegCount = thisJO.get("quantity").toString();
-						Date _lastWatered = VegItem.FORMAT.parse(thisJO.get("lastWatered").toString());
+
+//						Date _lastWatered = (Date)thisJO.get("lastWatered");
 						String _garden_veg_id = thisJO.get("garden_veg_ID").toString();
 						mAdapter.add(new VegItem(_vegName, VegItem.Affected.valueOf(_affected), _date, _vegCount, _lastWatered, _garden_veg_id));
+
 						mAdapter.notifyDataSetChanged();
 					} //for int i =1
 				}
@@ -427,7 +477,8 @@ public class VegManagerActivity extends ListActivity {
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
-			} catch (ParseException e) {
+			}
+			catch (ParseException e) {
 				e.printStackTrace();
 			}
 		} //close on post execute

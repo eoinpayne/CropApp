@@ -6,9 +6,13 @@
     android:background="@color/colorPrimary"
     >
 
+    <include
+        android:id="@+id/my_toolbar"
+        layout="@layout/app_bar"/>
     <!-- Title -->
 
     <TextView
+        android:layout_below="@+id/my_toolbar"
         android:id="@+id/ChooseVegLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

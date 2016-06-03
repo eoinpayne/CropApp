@@ -7,6 +7,8 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.JsonWriter;
 import android.util.Log;
 import android.view.View;
@@ -25,10 +27,15 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.sql.Array;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Hashtable;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,8 +43,9 @@ import org.json.JSONObject;
 import com.eoinpayne.crop.cropapp.VegItem.Affected;
 
 
-public class AddVegActivity extends Activity {  //appcompat?
+public class AddVegActivity extends AppCompatActivity {  //appcompat  Activity?
 
+	private Toolbar toolbar;
 	//private static final String RESTART_KEY = "restart"; etc.. not needed?
 
 	// 7 days in milliseconds - 7 * 24 * 60 * 60 * 1000
@@ -47,6 +55,15 @@ public class AddVegActivity extends Activity {  //appcompat?
 	private static String timeString;
 	private static TextView dateView;
 	private Date mDate;
+	private static Date mDatePlanted;
+	public Date getDatePlanted() {
+		return mDatePlanted;
+	}
+	public static void setDatePlanted(Date datePlanted) {
+		mDatePlanted = datePlanted;
+	}
+
+
 	private int mCount;
 	private RadioGroup mAffectedRadioGroup;
 	private Spinner vegSpinner;
@@ -65,11 +82,19 @@ public class AddVegActivity extends Activity {  //appcompat?
 	//	TextView mTvCreate ;
 	//  TextView mTvRestart;
 	Context context;
+	Date fullDate_parsed;
+	String fullDate_parsedThenFormatted;
+	String stringed_up_date;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+//		getSupportActionBar().hide();
 		setContentView(R.layout.add_veg);
+		//add toolbar to activity
+		toolbar = (Toolbar)findViewById(R.id.my_toolbar);
+		setSupportActionBar(toolbar);
+
 		context = this;
 
 		Bundle bundle = getIntent().getExtras();
@@ -155,11 +180,27 @@ public class AddVegActivity extends Activity {  //appcompat?
 
 				// Date
 				fullDate = dateString + " " + timeString;
-				lastWatered = fullDate;
+
+
+				try {
+					fullDate_parsed = VegItem.FORMAT.parse(fullDate); //Date
+					fullDate_parsedThenFormatted = VegItem.FORMAT.format(fullDate_parsed); //string
+				} catch (ParseException e) {
+					e.printStackTrace();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+
+
+//				Date Datedate = mDate;
+//				String workingDate = mDate.toString();
+//
+//				lastWatered = (String) fullDate_parsed.;
 
 				// Package vegItem data into an Intent
-				Intent data = new Intent();
-
+//				Intent data = new Intent();
+//				stringed_up_date = fullDate_parsed.toString();
 				if ((vegSpinner.getSelectedItem().toString()) == null)
 				{
 					Toast.makeText(getBaseContext(),"Please choose Vegetable", Toast.LENGTH_LONG).show();
@@ -170,11 +211,18 @@ public class AddVegActivity extends Activity {  //appcompat?
 					chosenVeg = vegSpinner.getSelectedItem().toString(); //vegSpinner
 //					VegItem.packageIntent(data, chosenVeg, affected, fullDate, vegCount, lastWatered);
 //					setResult(Activity.RESULT_OK, data);
+					//ToDo get expectedHarvest date
+//					Date expectedHarvestDate = calcHarvestDate(chosenVeg, fullDate_parsed); //date
+					Date expectedHarvestDate = fullDate_parsed; //date
+
 					//todo persists data to the database
 					try {
 						AddVeg_BackgroundTask addVeg_backgroundTask = new AddVeg_BackgroundTask(AddVegActivity.this);
 //						BackgroundTask backgroundTask = new BackgroundTask(AddVegActivity.this);
-						addVeg_backgroundTask.execute("addVegItem", mGardenID, chosenVeg, affected.toString(), fullDate, vegCount, HomeActivity.global_UserID_String, lastWatered);
+						addVeg_backgroundTask.execute("addVegItem", mGardenID, chosenVeg,
+								affected.toString(), fullDate_parsed.toString(), vegCount,
+								HomeActivity.global_UserID_String, fullDate_parsed.toString(), expectedHarvestDate.toString());
+
 					}catch (Exception e){
 						e.printStackTrace();
 					}
@@ -225,6 +273,7 @@ public class AddVegActivity extends Activity {  //appcompat?
 
 		mDate = new Date();
 		mDate = new Date(mDate.getTime());
+
 
 		Calendar c = Calendar.getInstance();
 		c.setTime(mDate);
@@ -342,12 +391,21 @@ public class AddVegActivity extends Activity {  //appcompat?
 			int year = c.get(Calendar.YEAR);
 			int month = c.get(Calendar.MONTH);
 			int day = c.get(Calendar.DAY_OF_MONTH);
+//			int date = c.get(Calendar.DATE);
+//			String string_date = String.valueOf(date);
+//			try {
+//				Date parsedbadboy = VegItem.FORMAT.parse(string_date);
+//				setDatePlanted(parsedbadboy);
+//			} catch (ParseException e) {
+//				e.printStackTrace();
+//			}
+
 
 			// Create a new instance of DatePickerDialog and return it
 			return new DatePickerDialog(getActivity(), this, year, month, day);
 		}
 
-		@Override
+		@Override  //when date is picked from pop up window/fragment
 		public void onDateSet(DatePicker view, int year, int monthOfYear,
 							  int dayOfMonth) {
 			setDateString(year, monthOfYear, dayOfMonth);
@@ -398,6 +456,52 @@ public class AddVegActivity extends Activity {  //appcompat?
 			e.printStackTrace();
 		}
 		Log.i(TAG, msg);
+	}
+
+	//todo method that searches hashtable file for how long a vegetable takes to grow.
+	//Todo will take the current date and add the amount of days, and return expected harvest date.
+	public Date calcHarvestDate(String vegName, Date date){
+		Date expectedHarvestDate = null;
+		int daysToGrow = findDaysToGrow(vegName);
+
+		Calendar c=new GregorianCalendar();
+		c.add(Calendar.DATE, daysToGrow);
+		expectedHarvestDate=c.getTime();
+
+		return expectedHarvestDate;
+	}
+
+	//todo method to search hash table for a given vegetable and return the value (daysToGrow)
+	public int findDaysToGrow(String vegName){
+		Hashtable myHashTable = (Hashtable) loadStatus(DBScraper_vegInfo.daysToGrow_file);
+//		daysToGrow = Integer.parseInt(myHashTable.get(vegName));
+		int daysToGrow = (int)myHashTable.get(vegName);
+
+		return daysToGrow;
+
+	}
+
+	//todo method to retrieve hash table from stored file.
+	public Object loadStatus(String filename){
+		Object result = null;
+		try {
+//			FileInputStream saveFile = new FileInputStream("current.dat");
+//			FileInputStream saveFile = new FileInputStream(filename);
+
+//			FileInputStream saveFile = openFileInput(filename);
+//			ObjectInputStream in = new ObjectInputStream(saveFile);
+			ObjectInputStream in = new ObjectInputStream(new FileInputStream(filename));
+
+
+			result = in.readObject();
+			in.close();
+//			saveFile.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 }
