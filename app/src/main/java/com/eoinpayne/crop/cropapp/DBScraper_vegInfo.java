@@ -48,6 +48,8 @@ public class DBScraper_vegInfo implements Runnable {
     boolean deleted1;
     boolean deleted2;
     Hashtable daysToGrow_hash;
+    JSONObject myObject = new JSONObject();
+    JSONArray myArray = new JSONArray();
 
     public DBScraper_vegInfo(Context current){
         ctx = current;
@@ -67,6 +69,8 @@ public class DBScraper_vegInfo implements Runnable {
 //            deleted2 = vegNames_file_delete.delete();
             deleted1 = ctx.deleteFile(allVegInfo_file);
             deleted2 = ctx.deleteFile(vegNames_file);
+            deleted2 = ctx.deleteFile(daysToGrow_file);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -110,7 +114,7 @@ public class DBScraper_vegInfo implements Runnable {
 
             //////////// Decode JSON response ////////////////
             try {
-                daysToGrow_hash = new Hashtable();
+//                daysToGrow_hash = new Hashtable();
                 JSONObject jsonObject = new JSONObject(json);  //get Json object
                 JSONArray jsonArray = jsonObject.getJSONArray("server_response");  //get objects' array
                 JSONObject JO = jsonArray.getJSONObject(0); //get inner object from array at index 0
@@ -120,7 +124,8 @@ public class DBScraper_vegInfo implements Runnable {
                     String allVegInfo = "VegID: " + thisJO.getString("vID") + ".   Veg Name: " + thisJO.getString("vegName")
                             + ".   Preferred Soil: " + thisJO.getString("pSoilType") + thisJO.getString("pSoilType");
                     String vegName = thisJO.getString("vegName") + "\n";
-                    String vegName_hash = thisJO.getString("vegName");
+
+                    String vegName1 = thisJO.getString("vegName");
                     int averageDaysToGrow = (thisJO.getInt("avgDaysToGrow"));
 
 ////                    String averageDaysToGrow = null;
@@ -130,6 +135,14 @@ public class DBScraper_vegInfo implements Runnable {
 //                    }catch (Exception e){
 //                        e.printStackTrace();
 //                    }
+
+                    JSONObject jsonDaysToGrow = new JSONObject();
+                    jsonDaysToGrow.put(vegName1, averageDaysToGrow);
+                    myArray.put(jsonDaysToGrow);
+//                    myArray.add(vegName1, jsonDaysToGrow);
+
+
+
                     try {
                         //todo write in full json object of everything. then parse out after to allow choosing of "carrot"
 
@@ -143,7 +156,7 @@ public class DBScraper_vegInfo implements Runnable {
 
                         //ToDo add each key/value pair to hash table
 
-                        daysToGrow_hash.put(vegName_hash, averageDaysToGrow);
+//                        daysToGrow_hash.put(vegName1, averageDaysToGrow);
 
 
                     } catch (FileNotFoundException e) {
@@ -152,6 +165,24 @@ public class DBScraper_vegInfo implements Runnable {
                         e.printStackTrace();
                     }
                 } //for int i =1
+
+                //toDo put the JsonArray of JsonObjects into a JsonObject
+                myObject.put("daysToGrow_collection", myArray);
+                String daysToGrow_collection = myObject.toString();
+
+                //toDo write daysToGrow_collection to a file, like the vegName file.
+
+                FileOutputStream fos_daysToGrow = null;
+                try {
+                    fos_daysToGrow = ctx.openFileOutput(daysToGrow_file, ctx.MODE_APPEND);
+                    fos_daysToGrow.write(daysToGrow_collection.getBytes());
+                    fos_daysToGrow.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
 
                 //ToDo add completed hash table to it's file
 //                daysToGrow_file

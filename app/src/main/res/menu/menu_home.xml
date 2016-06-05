@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Choose Gardens: browse, create new garden, refresh -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/create_garden"
+        android:title="Create Garden"
+        android:icon="@drawable/create_garden_thick"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="100"
+
+        />
+
+    <item
+        android:id="@+id/browse_veg"
+        android:title="Browse"
+        android:icon="@drawable/search_veg"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="300"
+        />
+
+    <item
+        android:id="@+id/refresh_garden"
+        android:title="Refresh Garden"
+        android:icon="@drawable/refresh"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="200"
+        />
+</menu>

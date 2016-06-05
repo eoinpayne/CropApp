@@ -167,20 +167,38 @@
         >
     </TextView>
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="29dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="15dp"
-        android:text="Water"
-        android:id="@+id/water_btn"
+    <!--<Button-->
+        <!--style="?android:attr/buttonStyleSmall"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="29dp"-->
+        <!---->
+        <!--android:layout_marginTop="5dp"-->
+        <!--android:layout_marginRight="15dp"-->
+        <!--android:text="Water"-->
+        <!--android:id="@+id/water_btn"-->
 
+        <!--android:layout_below="@+id/waterTitle"-->
+        <!--android:layout_alignRight="@+id/waterTitle"-->
+
+        <!--android:background="#6397ba"-->
+         <!--/>-->
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/small_icon_button"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="-3dp"
+        android:id="@+id/water_btn"
+        android:src="@drawable/water_single"
         android:layout_below="@+id/waterTitle"
         android:layout_alignRight="@+id/waterTitle"
 
-        android:background="#6397ba"
-         />
+        android:contentDescription="Water single crop item"/>
+
+
+
+
+
     <!--android:layout_alignBottom="@+id/waterTitle"-->
 
 

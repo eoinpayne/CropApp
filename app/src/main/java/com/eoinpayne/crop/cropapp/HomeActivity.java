@@ -12,6 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputType;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -47,8 +50,8 @@ public class HomeActivity extends AppCompatActivity {          //ListActivity {
     public static String global_UserID_String;
     public String UserID_String = Integer.toString(global_userID); ///////****/////
     TextView textView;
-    Button updateButton;
-    Button createGardenButton;
+//    Button updateButton;
+//    Button createGardenButton;
     ListView gardenListView;
     public ArrayList<Garden> mGardens = new ArrayList<>();
     public ArrayAdapter<Garden> adapter;  //could use cursosr adaptor for db?
@@ -83,23 +86,23 @@ public class HomeActivity extends AppCompatActivity {          //ListActivity {
 
 
 //        //move to on create and have this button to refresh?
-        updateButton = (Button)findViewById(R.id.updateGarden_btn);
-        updateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                adapter.clear();
-                new HomeBackgroundTask().execute("display_gardens", UserID_String);
-            }
-        });
+//        updateButton = (Button)findViewById(R.id.updateGarden_btn);
+//        updateButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                adapter.clear();
+//                new HomeBackgroundTask().execute("display_gardens", UserID_String);
+//            }
+//        });
 
         ////////////create garden
-        createGardenButton = (Button)findViewById(R.id.createGarden_btn);
-        createGardenButton .setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getGardenName();
-            }
-        });
+//        createGardenButton = (Button)findViewById(R.id.createGarden_btn);
+//        createGardenButton .setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                getGardenName();
+//            }
+//        });
 
         //// LOAD GARDEN
         gardenListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -201,6 +204,37 @@ public class HomeActivity extends AppCompatActivity {          //ListActivity {
             }
         });
     } //close onCreate
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_home, menu);
+        return true;
+
+//        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int res_id = item.getItemId();
+
+        if(res_id == R.id.browse_veg){
+            //todo display the browse catalogue activity?
+        }
+        else if(res_id == R.id.create_garden){
+            getGardenName();
+        }
+        else if(res_id == R.id.refresh_garden){
+            adapter.clear();
+            new HomeBackgroundTask().execute("display_gardens", UserID_String);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
+
+
 
     public void getGardenName()
     {

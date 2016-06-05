@@ -9,9 +9,21 @@
         <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:colorAccent">@color/colorAccent</item>
         <!--<item name="android:background">@color/colorPrimary</item>-->
+
+        <!--<item name="android:windowBackground">#212121</item>-->
+
+
         <item name="windowActionBar">true</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowActionBarOverlay">false</item>
 
     </style>
+
+    <style name="small_icon_button" parent="android:Widget.DeviceDefault.Light.Button.Borderless.Small">
+        <!--<item name="android:layout_width">fill_parent</item>-->
+        <!--<item name="android:layout_height">wrap_content</item>-->
+        <!--<item name="android:textColor">#00FF00</item>-->
+        <!--<item name="android:typeface">monospace</item>-->
+    </style>
 </resources>
+    <!--style="?android:attr/borderlessButtonStyle"-->

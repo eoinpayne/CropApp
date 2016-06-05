@@ -59,6 +59,9 @@ public class VegItem {
 	private Date mLastWatered;
 	private String mVegCount;
 	private String mGardenVegID;
+	private Date mExpectedHarvestDate;
+
+
 
 
 	VegItem(String title, Affected affected, Date date, String vegCount) {
@@ -71,7 +74,8 @@ public class VegItem {
 
 	}
 
-	VegItem(String title, Affected affected, Date date, String vegCount, Date lastWatered, String gardenVegID) {
+	VegItem(String title, Affected affected, Date date, String vegCount, Date lastWatered,
+							String gardenVegID, Date expectedHarvestDate) {
 		this.mTitle = title;
 //		this.mStatus = status;
 		this.mAffected = affected;
@@ -79,6 +83,7 @@ public class VegItem {
 		this.mLastWatered = lastWatered;
 		this.mVegCount = vegCount;
 		this.mGardenVegID = gardenVegID;
+		this.mExpectedHarvestDate = expectedHarvestDate;
 
 	}
 
@@ -170,6 +175,12 @@ public class VegItem {
 //		mLastWatered = c.getTime();
 		mLastWatered = currentDate;
 		//ToDo format?
+	}
+
+	public Date getExpectedHarvestDate() {return mExpectedHarvestDate;}
+
+	public void setExpectedHarvestDate(Date expectedHarvestDate) {
+		mExpectedHarvestDate = expectedHarvestDate;
 	}
 
 	// Take a set of String data values and 

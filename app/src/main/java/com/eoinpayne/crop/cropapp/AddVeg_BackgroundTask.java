@@ -107,7 +107,7 @@ public class AddVeg_BackgroundTask extends AsyncTask<String,Void,String> {
                 vegCount = params[5];
                 userID = params[6];
                 lastWatered = params[7];
-                eta = params[7]; //expectedHarvestDate
+                eta = params[8]; //expectedHarvestDate
                 //ToDo pass through the estaimted harvest date
 //                int eta =
                 String data = URLEncoder.encode("gardenID", "UTF-8") + "=" + URLEncoder.encode(gardenID,"UTF-8" )

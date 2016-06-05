@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Garden: browse, plant, water all, delete all? harvest all?-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/browse_veg"
+        android:title="Browse"
+        android:icon="@drawable/search_veg"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="300"
+        />
+
+
+    <item
+        android:id="@+id/water_all"
+        android:title="Water All"
+        android:icon="@drawable/water_all_border"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="200"
+
+        />
+
+    <item
+        android:id="@+id/plant_veg"
+        android:title="Plant New"
+        android:icon="@drawable/plant_new"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="100"
+
+        />
+
+    <!--app:showAsAction="never"-->
+    <!--//puts in triple dot-->
+
+    <!--<item-->
+        <!--android:id="@+id/browse_veg"-->
+        <!--android:title="Browse"-->
+        <!--android:icon="@drawable/search_veg"-->
+        <!--app:showAsAction="ifRoom"-->
+        <!--/>-->
+
+
+</menu>

@@ -9,8 +9,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.JsonWriter;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -23,19 +25,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.sql.Array;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Hashtable;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,22 +45,23 @@ public class AddVegActivity extends AppCompatActivity {  //appcompat  Activity?
 	//private static final String RESTART_KEY = "restart"; etc.. not needed?
 
 	// 7 days in milliseconds - 7 * 24 * 60 * 60 * 1000
-	private static final int SEVEN_DAYS = 604800000;
-	private static final String TAG = "Lab-UserInterface";
+//	private static final int SEVEN_DAYS = 604800000;
+	private static final String TAG = "CropZ_app";
 	private static String dateString;
 	private static String timeString;
 	private static TextView dateView;
 	private Date mDate;
 	private static Date mDatePlanted;
-	public Date getDatePlanted() {
-		return mDatePlanted;
-	}
-	public static void setDatePlanted(Date datePlanted) {
-		mDatePlanted = datePlanted;
-	}
+
+//	public Date getDatePlanted() {
+//		return mDatePlanted;
+//	}
+//	public static void setDatePlanted(Date datePlanted) {
+//		mDatePlanted = datePlanted;
+//	}
 
 
-	private int mCount;
+//	private int mCount;
 	private RadioGroup mAffectedRadioGroup;
 	private Spinner vegSpinner;
 	private Spinner countSpinner;
@@ -77,33 +74,29 @@ public class AddVegActivity extends AppCompatActivity {  //appcompat  Activity?
 	String fullDate;
 	Affected affected;
 	String lastWatered;
-	//	public int mCreate = 0;
-	//  public int mRestart = 0;
-	//	TextView mTvCreate ;
-	//  TextView mTvRestart;
 	Context context;
 	Date fullDate_parsed;
 	String fullDate_parsedThenFormatted;
-	String stringed_up_date;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-//		getSupportActionBar().hide();
 		setContentView(R.layout.add_veg);
+
 		//add toolbar to activity
 		toolbar = (Toolbar)findViewById(R.id.my_toolbar);
 		setSupportActionBar(toolbar);
 
 		context = this;
 
+		//Retrieve bundle information passed from previous activity.
 		Bundle bundle = getIntent().getExtras();
 		mGardenName = bundle.getString("gardenName");
 		mGardenID = bundle.getString("gardenID");
-		mUserID = bundle.getString("userID");
+//		mUserID = bundle.getString("userID");
 
 		vegSpinner = (Spinner) findViewById(R.id.chooseVegSpinner);
-		ArrayList<String> vegItems = getVegNames(DBScraper_vegInfo.vegNames_file);
+		ArrayList<String> vegItems = retrieveStringArrayFromFile(DBScraper_vegInfo.vegNames_file, context);
 		ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_layout, R.id.txt,vegItems);
 		vegSpinner.setAdapter(adapter);
 		countSpinner = (Spinner) findViewById(R.id.QuantitySpinner);
@@ -173,18 +166,18 @@ public class AddVegActivity extends AppCompatActivity {  //appcompat  Activity?
 				// Gather vegItem data
 //
 //				//TODO -  Get if Affected by Rain XX
-				affected = getAffected();
+//				affected = getAffected();
 
 				//TODO -  Get veg Count
-				vegCount = countSpinner.getSelectedItem().toString();
+//				vegCount = countSpinner.getSelectedItem().toString();
 
 				// Date
-				fullDate = dateString + " " + timeString;
+//				fullDate = dateString + " " + timeString;
 
 
 				try {
-					fullDate_parsed = VegItem.FORMAT.parse(fullDate); //Date
-					fullDate_parsedThenFormatted = VegItem.FORMAT.format(fullDate_parsed); //string
+//					fullDate_parsed = VegItem.FORMAT.parse(fullDate); //Date
+					fullDate_parsed = VegItem.FORMAT.parse(dateString + " " + timeString); //Date
 				} catch (ParseException e) {
 					e.printStackTrace();
 				} catch (Exception e) {
@@ -213,15 +206,15 @@ public class AddVegActivity extends AppCompatActivity {  //appcompat  Activity?
 //					setResult(Activity.RESULT_OK, data);
 					//ToDo get expectedHarvest date
 //					Date expectedHarvestDate = calcHarvestDate(chosenVeg, fullDate_parsed); //date
-					Date expectedHarvestDate = fullDate_parsed; //date
+//					Date expectedHarvestDate = fullDate_parsed; //date
 
 					//todo persists data to the database
 					try {
 						AddVeg_BackgroundTask addVeg_backgroundTask = new AddVeg_BackgroundTask(AddVegActivity.this);
 //						BackgroundTask backgroundTask = new BackgroundTask(AddVegActivity.this);
 						addVeg_backgroundTask.execute("addVegItem", mGardenID, chosenVeg,
-								affected.toString(), fullDate_parsed.toString(), vegCount,
-								HomeActivity.global_UserID_String, fullDate_parsed.toString(), expectedHarvestDate.toString());
+								getAffected().toString(), fullDate_parsed.toString(), countSpinner.getSelectedItem().toString(),
+								HomeActivity.global_UserID_String, fullDate_parsed.toString(), calcHarvestDate(chosenVeg, fullDate_parsed).toString());
 
 					}catch (Exception e){
 						e.printStackTrace();
@@ -242,38 +235,35 @@ public class AddVegActivity extends AppCompatActivity {  //appcompat  Activity?
 		});
 	} //CLOSE ONCREATE
 
-
-
-	private ArrayList<String> getVegNames(String filename) {
-		JSONArray jsonArray = null;
-		ArrayList<String> vegList = new ArrayList<>();
-		try {
-			FileInputStream fileInputStream = openFileInput(DBScraper_vegInfo.vegNames_file);
-			InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-			BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-			StringBuilder stringBuilder = new StringBuilder();
-			String line;
-			while ((line = bufferedReader.readLine()) != null) {
-//				stringBuilder.append(line);
-				vegList.add(line);
-			}
-			String data = stringBuilder.toString().trim();
-		}catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return vegList;
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater menuInflater = getMenuInflater();
+		menuInflater.inflate(R.menu.menu_main, menu);
+		return true;
+//        return super.onCreateOptionsMenu(menu);
 	}
 
-	// Do not modify below here
-	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int res_id = item.getItemId();
+
+		if(res_id == R.id.browse_veg){
+			//todo display the browse catalogue activity?
+		}
+//		else if(res_id == R.id.plant_veg){
+//			//toDo launch plant veg
+//		}
+		return super.onOptionsItemSelected(item);
+	}
+
+
+
+
 	// Use this method to set the default date and time
-	
 	private void setDefaultDateTime() {
 
 		mDate = new Date();
 		mDate = new Date(mDate.getTime());
-
 
 		Calendar c = Calendar.getInstance();
 		c.setTime(mDate);
@@ -289,40 +279,16 @@ public class AddVegActivity extends AppCompatActivity {  //appcompat  Activity?
 //		timeView.setText(timeString);
 	}
 
-//	private void setETA() {
-//
-//		// Default is current time + 7 days
-//		mETA = new Date();
-//		mETA = new Date(mDate.getTime() + SEVEN_DAYS);
-//
-//		Calendar c = Calendar.getInstance();
-//		c.setTime(mDate);
-//
-//		setDateString(c.get(Calendar.YEAR), c.get(Calendar.MONTH),
-//				c.get(Calendar.DAY_OF_MONTH));
-//
-//		dateView.setText(dateString);
-//
-//		setTimeString(c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE),
-//				c.get(Calendar.MILLISECOND));
-//
-//		timeView.setText(timeString);
-//	}
-
-
-
+	//Methods for neatly displaying Date & Time
 	private static void setDateString(int year, int monthOfYear, int dayOfMonth) {
-
 		// Increment monthOfYear for Calendar/Date -> Time Format setting
 		monthOfYear++;
 		String mon = "" + monthOfYear;
 		String day = "" + dayOfMonth;
-
 		if (monthOfYear < 10)
 			mon = "0" + monthOfYear;
 		if (dayOfMonth < 10)
 			day = "0" + dayOfMonth;
-
 		dateString = year + "-" + mon + "-" + day;
 	}
 
@@ -338,32 +304,6 @@ public class AddVegActivity extends AppCompatActivity {  //appcompat  Activity?
 		timeString = hour + ":" + min + ":00";
 	}
 
-//	private Priority getPriority() {
-//
-//		switch (mPriorityRadioGroup.getCheckedRadioButtonId()) {
-//		case R.id.lowPriority: {
-//			return Priority.LOW;
-//		}
-//		case R.id.highPriority: {
-//			return Priority.HIGH;
-//		}
-//		default: {
-//			return Priority.MED;
-//		}
-//		}
-//	}
-
-//	private Status getStatus() {
-//
-//		switch (mStatusRadioGroup.getCheckedRadioButtonId()) {
-//		case R.id.statusCheckBox: {
-//			return Status.DONE;
-//		}
-//		default: {
-//			return Status.NOTDONE;
-//		}
-//		}
-//	}
 
 	private Affected getAffected() {
 
@@ -378,28 +318,15 @@ public class AddVegActivity extends AppCompatActivity {  //appcompat  Activity?
 	}
 
 	// DialogFragment used to pick a vegItem deadline date
-
 	public static class DatePickerFragment extends DialogFragment implements
 			DatePickerDialog.OnDateSetListener {
 
-		@Override
+		@Override	// Use the current date as the default date in the picker
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
-
-			// Use the current date as the default date in the picker
-
 			final Calendar c = Calendar.getInstance();
 			int year = c.get(Calendar.YEAR);
 			int month = c.get(Calendar.MONTH);
 			int day = c.get(Calendar.DAY_OF_MONTH);
-//			int date = c.get(Calendar.DATE);
-//			String string_date = String.valueOf(date);
-//			try {
-//				Date parsedbadboy = VegItem.FORMAT.parse(string_date);
-//				setDatePlanted(parsedbadboy);
-//			} catch (ParseException e) {
-//				e.printStackTrace();
-//			}
-
 
 			// Create a new instance of DatePickerDialog and return it
 			return new DatePickerDialog(getActivity(), this, year, month, day);
@@ -409,46 +336,17 @@ public class AddVegActivity extends AppCompatActivity {  //appcompat  Activity?
 		public void onDateSet(DatePicker view, int year, int monthOfYear,
 							  int dayOfMonth) {
 			setDateString(year, monthOfYear, dayOfMonth);
-
 			dateView.setText(dateString);
 		}
 	}
 
-	// DialogFragment used to pick a vegItem deadline time
-
-//	public static class TimePickerFragment extends DialogFragment implements
-//			TimePickerDialog.OnTimeSetListener {
-//
-//		@Override
-//		public Dialog onCreateDialog(Bundle savedInstanceState) {
-//
-//			// Use the current time as the default values for the picker
-//			final Calendar c = Calendar.getInstance();
-//			int hour = c.get(Calendar.HOUR_OF_DAY);
-//			int minute = c.get(Calendar.MINUTE);
-//
-//			// Create a new instance of TimePickerDialog and return
-//			return new TimePickerDialog(getActivity(), this, hour, minute,
-//					true);
-//		}
-//
-//		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-//			setTimeString(hourOfDay, minute, 0);
-//
-//			timeView.setText(timeString);
-//		}
-//	}
-
+	//displays the fragment for picking dates when called
 	private void showDatePickerDialog() {
 		DialogFragment newFragment = new DatePickerFragment();
 		newFragment.show(getFragmentManager(), "datePicker");
 	}
 
-//	private void showTimePickerDialog() {
-//		DialogFragment newFragment = new TimePickerFragment();
-//		newFragment.show(getFragmentManager(), "timePicker");
-//	}
-
+	//to aid debugging by logging error messages.
 	private void log(String msg) {
 		try {
 			Thread.sleep(500);
@@ -458,10 +356,11 @@ public class AddVegActivity extends AppCompatActivity {  //appcompat  Activity?
 		Log.i(TAG, msg);
 	}
 
-	//todo method that searches hashtable file for how long a vegetable takes to grow.
-	//Todo will take the current date and add the amount of days, and return expected harvest date.
+	// ToDo Display expected days left until harvest XX.
+	//Calculates expectedHarvestDate using the vegName to find how many days to grow (int) stored on DB.
+	//adds that amount of days to the date the item was planted using Calender.
 	public Date calcHarvestDate(String vegName, Date date){
-		Date expectedHarvestDate = null;
+		Date expectedHarvestDate;
 		int daysToGrow = findDaysToGrow(vegName);
 
 		Calendar c=new GregorianCalendar();
@@ -471,37 +370,60 @@ public class AddVegActivity extends AppCompatActivity {  //appcompat  Activity?
 		return expectedHarvestDate;
 	}
 
-	//todo method to search hash table for a given vegetable and return the value (daysToGrow)
+	//Returns number of days to grow to the calcHarvestDate function.
+	//Will call method to opens file. The file contains a string of jsonObjects of each vegetables typical grow time.
+	// The String and converts to JsonObjects, The vegName passed in will match the correct key:value pair and assign int daysToGrow.
 	public int findDaysToGrow(String vegName){
-		Hashtable myHashTable = (Hashtable) loadStatus(DBScraper_vegInfo.daysToGrow_file);
-//		daysToGrow = Integer.parseInt(myHashTable.get(vegName));
-		int daysToGrow = (int)myHashTable.get(vegName);
-
+		JSONObject jsonObject;
+		JSONArray daysToGrow_array;
+		int daysToGrow = 0;
+		try {
+			jsonObject = new JSONObject(retrieveStringFromFile(DBScraper_vegInfo.daysToGrow_file, context));
+			daysToGrow_array = jsonObject.getJSONArray("daysToGrow_collection");
+			for (int i=0; i<daysToGrow_array.length(); i++){
+				JSONObject daysToGrow_pair = (JSONObject) daysToGrow_array.get(i);
+				if(daysToGrow_pair.has(vegName)){
+				daysToGrow = (int)daysToGrow_pair.get(vegName);
+					return daysToGrow;
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 		return daysToGrow;
 
 	}
 
-	//todo method to retrieve hash table from stored file.
-	public Object loadStatus(String filename){
-		Object result = null;
+	//Opens file and returns it's content as a string.
+	public static final String retrieveStringFromFile(String filename, Context ctx) {
+		String tempString = "";
 		try {
-//			FileInputStream saveFile = new FileInputStream("current.dat");
-//			FileInputStream saveFile = new FileInputStream(filename);
-
-//			FileInputStream saveFile = openFileInput(filename);
-//			ObjectInputStream in = new ObjectInputStream(saveFile);
-			ObjectInputStream in = new ObjectInputStream(new FileInputStream(filename));
-
-
-			result = in.readObject();
-			in.close();
-//			saveFile.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
+			FileInputStream fileInputStream = ctx.openFileInput(filename);
+			InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+			BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+			StringBuilder stringBuilder = new StringBuilder();
+			tempString = bufferedReader.readLine();
+		}catch (IOException e) {
 			e.printStackTrace();
 		}
-		return result;
+		return tempString;
+	}
+
+	//opens file and build an array list for each new line in the file.
+	public static final ArrayList<String> retrieveStringArrayFromFile(String filename, Context ctx) {
+		ArrayList<String> tempList = new ArrayList<>();
+		try {
+			FileInputStream fileInputStream = ctx.openFileInput(filename);
+			InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+			BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+			String line;
+			while ((line = bufferedReader.readLine()) != null) {
+				tempList.add(line);
+			}
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+		return tempList;
 	}
 
 }

@@ -51,46 +51,45 @@
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         >
-        <LinearLayout
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:gravity = "left"
-            android:id="@+id/updateButtonLayout"
-            android:weightSum="1.0">
+        <!--<LinearLayout-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:gravity = "left"-->
+            <!--android:id="@+id/updateButtonLayout"-->
+            <!--android:weightSum="1.0">-->
 
-                <Button
-                android:layout_width="0dp"
-                android:layout_height="35sp"
-                android:text="@string/update_garden_btn_lbl"
-                android:textStyle="bold"
-                style="?android:textAppearanceSmall"
-                android:layout_weight=".4"
+                <!--<Button-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="35sp"-->
+                <!--android:text="@string/update_garden_btn_lbl"-->
+                <!--android:textStyle="bold"-->
+                <!--style="?android:textAppearanceSmall"-->
+                <!--android:layout_weight=".4"-->
 
 
-                android:id="@+id/updateGarden_btn"
-                android:background="@drawable/btn_selecter"
-                android:textColor="@color/textColor"
-                    android:singleLine="false"
-                    android:layout_marginRight="1dp" />
+                <!--android:id="@+id/updateGarden_btn"-->
+                <!--android:background="@drawable/btn_selecter"-->
+                <!--android:textColor="@color/textColor"-->
+                    <!--android:singleLine="false"-->
+                    <!--android:layout_marginRight="1dp" />-->
 
-            <Button
-                android:id="@+id/createGarden_btn"
-                android:layout_below="@id/updateButtonLayout"
-                android:layout_weight=".6"
-                android:layout_width="0dp"
-                android:layout_height="35sp"
-                android:text="CREATE GARDEN"
-                android:textStyle="bold"
-                style="?android:textAppearanceSmall"
-                android:background="@drawable/btn_selecter"
-                android:textColor="@color/textColor"
-                android:layout_marginLeft="1dp" />
-        </LinearLayout>
+            <!--<Button-->
+                <!--android:id="@+id/createGarden_btn"-->
+                <!--android:layout_below="@id/updateButtonLayout"-->
+                <!--android:layout_weight=".6"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="35sp"-->
+                <!--android:text="CREATE GARDEN"-->
+                <!--android:textStyle="bold"-->
+                <!--style="?android:textAppearanceSmall"-->
+                <!--android:background="@drawable/btn_selecter"-->
+                <!--android:textColor="@color/textColor"-->
+                <!--android:layout_marginLeft="1dp" />-->
+        <!--</LinearLayout>-->
 
         <!--"-->
 
         <ListView
-            android:layout_below="@id/updateButtonLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Hello world!!:"

@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -101,11 +102,7 @@ public class VegListAdapter extends BaseAdapter {
 
 		//TODO Display days since watered
 		final TextView waterCountView = (TextView)item_layout.findViewById(R.id.waterCount);
-//		waterCountView.setText(String.valueOf(vegItem.getDate()));
-
-//		waterCountView.setText(String.valueOf(vegItem.getLastWatered_Days()));
-
-		final Button waterBTN = (Button)item_layout.findViewById(R.id.water_btn);
+		final ImageButton waterBTN = (ImageButton)item_layout.findViewById(R.id.water_btn);
 		waterBTN.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -119,15 +116,15 @@ public class VegListAdapter extends BaseAdapter {
 				}catch (Exception e){
 					e.printStackTrace();
 				}
-
 				checkWater(vegItem, waterCountView);
-
-
 			}
 		});
 
+		final TextView daysToHarvestView = (TextView)item_layout.findViewById(R.id.etaView);
+
 		checkColour(vegItem, item_layout);
 		checkWater(vegItem, waterCountView);
+		calcDaysToHarvest(vegItem, daysToHarvestView);
 //		changeTextColour(vegItem, titleView);
 
 
@@ -225,6 +222,13 @@ public class VegListAdapter extends BaseAdapter {
 //		return daysSinceWatered;
 //	}
 
+	public void calcDaysToHarvest(VegItem vegItem, TextView daysToHarvestView){
+		int daysToHarvest = 0;
+//		daysToHarvest = getDaysDifference(VegListAdapter.GetCurrentDate(), vegItem.getExpectedHarvestDate());
+//		daysToHarvestView.setText(String.valueOf(daysToHarvest +1));
+		daysToHarvestView.setText(String.valueOf(getDaysDifference(VegListAdapter.GetCurrentDate(), vegItem.getExpectedHarvestDate())+1));
+	}
+
 
 	public void checkWater(VegItem vegItem, TextView waterCountView){
 //		waterCountView.setText(String.valueOf(vegItem.getLastWatered()));
@@ -245,6 +249,7 @@ public class VegListAdapter extends BaseAdapter {
 	{
 		if(fromDate==null||toDate==null)
 			return 0;
+
 
 		return (int)( (toDate.getTime() - fromDate.getTime()) / (1000 * 60 * 60 * 24));
 	}

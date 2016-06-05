@@ -8,14 +8,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -43,9 +46,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class VegManagerActivity extends ListActivity {
+public class VegManagerActivity extends AppCompatActivity {
 	//extend one of the built-in layouts and inflate custom layout during initialization:
 	private Toolbar toolbar;
+	private ListView myListView;
+
 	Button plantVeg;
 	Button waterAll;
 	// Add a vegItem Request Code
@@ -64,9 +69,12 @@ public class VegManagerActivity extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_veg_manager);
 
-//		toolbar = (Toolbar)findViewById(R.id.my_toolbar);
-//		setSupportActionBar(toolbar);
+		toolbar = (Toolbar)findViewById(R.id.my_toolbar);
+		setSupportActionBar(toolbar);
+
+		myListView = (ListView) findViewById(R.id.myListView);
 
 		// Create a new VegListAdapter for this ListActivity's ListView
 		mAdapter = new VegListAdapter(getApplicationContext()); //mContext instead of getApplicationContect()?
@@ -85,42 +93,73 @@ public class VegManagerActivity extends ListActivity {
 //		actionBar.addTab(actionBar.newTab().setText("Deadline").setTabListener(tabListener));
 
 		// Put divider between VegItems and headerView
-		getListView().setHeaderDividersEnabled(true);
+		myListView.setHeaderDividersEnabled(true);
 		//TODO - Inflate headerView for header_view.xml file XX
-		LinearLayout headerView = (LinearLayout) getLayoutInflater().inflate(R.layout.header_view, getListView(),false );
+//		LinearLayout headerView = (LinearLayout) getLayoutInflater().inflate(R.layout.header_view, myListView,false );
 		//TODO - Add HeaderView to ListView XX
-		getListView().addHeaderView(headerView);
+//		myListView.addHeaderView(headerView);
 //		new VegManagerBackgroundTask().execute("display_veg", userID, gardenID);
 
-		//TODO - Attach Listener to headerView buttons. Implement onClick(). XX
-		plantVeg = (Button) findViewById(R.id.plantVeg_btn);
-		plantVeg.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent addVeg_intent = new Intent(getApplicationContext(), AddVegActivity.class);
-				Bundle extras = new Bundle();
-				extras.putString("gardenName", gardenName);
-				extras.putString("gardenID", gardenID);
-				extras.putString("userID", userID);
-				addVeg_intent.putExtras(extras);
-				//todo: get rid of double way of displaying to mAdapter? Just regular start activity?
-				//todo persist data and finish?
-				startActivity(addVeg_intent);
-			}
-		});
+//		//TODO - Attach Listener to headerView buttons. Implement onClick(). XX
+//		plantVeg = (Button) findViewById(R.id.plantVeg_btn);
+//		plantVeg.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				Intent addVeg_intent = new Intent(getApplicationContext(), AddVegActivity.class);
+//				Bundle extras = new Bundle();
+//				extras.putString("gardenName", gardenName);
+//				extras.putString("gardenID", gardenID);
+//				extras.putString("userID", userID);
+//				addVeg_intent.putExtras(extras);
+//				//todo: get rid of double way of displaying to mAdapter? Just regular start activity?
+//				//todo persist data and finish?
+//				startActivity(addVeg_intent);
+//			}
+//		});
 		//TODO waterall resets all the dates that plant last watered. persist these dates into db for when item loads out
-		waterAll = (Button) findViewById(R.id.waterAll_btn);
-		waterAll.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Toast.makeText(getBaseContext(),"WATERED ALL!!", Toast.LENGTH_LONG).show();
-			}
-		});
+//		waterAll = (Button) findViewById(R.id.waterAll_btn);
+//		waterAll.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				Toast.makeText(getBaseContext(),"WATERED ALL!!", Toast.LENGTH_LONG).show();
+//			}
+//		});
 
 		//TODO - Attach the adapter to this ListActivity's ListView XX
-        getListView().setAdapter(mAdapter);
+		myListView.setAdapter(mAdapter);
 
 	} //closes the onCreate
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater menuInflater = getMenuInflater();
+		menuInflater.inflate(R.menu.menu_garden, menu);
+		return true;
+
+//        return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int res_id = item.getItemId();
+
+		if(res_id == R.id.browse_veg){
+			//todo display the browse catalogue activity?
+		}
+		else if(res_id == R.id.plant_veg){
+			//toDo launch plant veg
+			Intent addVeg_intent = new Intent(getApplicationContext(), AddVegActivity.class);
+			Bundle extras = new Bundle();
+			extras.putString("gardenName", gardenName);
+			extras.putString("gardenID", gardenID);
+			extras.putString("userID", userID);
+			addVeg_intent.putExtras(extras);
+			//todo: get rid of double way of displaying to mAdapter? Just regular start activity?
+			//todo persist data and finish?
+			startActivity(addVeg_intent);
+		}
+		return super.onOptionsItemSelected(item);
+	}
 
 
 
@@ -161,28 +200,28 @@ public class VegManagerActivity extends ListActivity {
 //
 //	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-
-		menu.add(Menu.NONE, MENU_DELETE, Menu.NONE, "Delete all");
-		menu.add(Menu.NONE, MENU_DUMP, Menu.NONE, "Dump to log");
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case MENU_DELETE:
-			mAdapter.clear();
-			return true;
-		case MENU_DUMP:
-			dump();
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//		super.onCreateOptionsMenu(menu);
+//
+//		menu.add(Menu.NONE, MENU_DELETE, Menu.NONE, "Delete all");
+//		menu.add(Menu.NONE, MENU_DUMP, Menu.NONE, "Dump to log");
+//		return true;
+//	}
+//
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//		switch (item.getItemId()) {
+//		case MENU_DELETE:
+//			mAdapter.clear();
+//			return true;
+//		case MENU_DUMP:
+//			dump();
+//			return true;
+//		default:
+//			return super.onOptionsItemSelected(item);
+//		}
+//	}
 
 	private void dump() {
 
@@ -467,7 +506,10 @@ public class VegManagerActivity extends ListActivity {
 
 //						Date _lastWatered = (Date)thisJO.get("lastWatered");
 						String _garden_veg_id = thisJO.get("garden_veg_ID").toString();
-						mAdapter.add(new VegItem(_vegName, VegItem.Affected.valueOf(_affected), _date, _vegCount, _lastWatered, _garden_veg_id));
+						Date __expectedHarvestDate = VegItem.FORMATLONG.parse(thisJO.get("eta").toString());
+//						int daysToHarvest = calcDaysToHarvest(VegListAdapter.GetCurrentDate() ,__expectedHarvestDate);
+						mAdapter.add(new VegItem(_vegName, VegItem.Affected.valueOf(_affected), _date, _vegCount,
+												_lastWatered, _garden_veg_id, __expectedHarvestDate));
 
 						mAdapter.notifyDataSetChanged();
 					} //for int i =1

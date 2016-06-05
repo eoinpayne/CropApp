@@ -85,7 +85,7 @@
     <Button
         android:id="@+id/date_picker_button"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="25dp"
         android:layout_alignParentLeft="true"
         android:layout_below="@id/date"
         android:text="@string/choose_date_string"
@@ -94,7 +94,8 @@
         android:layout_marginLeft="5dp"
         android:background="@drawable/btn_selecter"
         android:textColor="@color/textColor"
-        />
+        android:drawableStart="@drawable/ic_action_name"
+        android:drawableLeft="@drawable/ic_action_name"/>
 
 
 
