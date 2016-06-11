@@ -32,9 +32,9 @@
     <string name="add_new_veg_item_string">Add New Veg Item</string>
 
 
-    <string name="done_string">Done:</string>
+    <string name="done_string">Harvested:</string>
     <string name="priority_string">Priority:</string>
-    <string name="date_string">Date:</string>
+    <string name="date_string">Planted:</string>
     <string name="title_string">Title</string>
     <string name="veg_string">Vegetable</string>
     <string name="status_string">Status</string>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+              <!--android:orientation="vertical"-->
+              <!--android:layout_width="match_parent"-->
+              <!--android:layout_height="match_parent">-->
+
+<!--</LinearLayout>-->
+
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="com.eoinpayne.crop.cropapp.GardenActivity">
+
+    <LinearLayout
+    android:id="@+id/lin"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+        <Button
+            android:id="@+id/magic_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Magic Btn"/>
+        <LinearLayout
+            android:id="@+id/magic_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/magic_btn1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Magic Btn"/>
+        <LinearLayout
+            android:id="@+id/magic_layout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/magic_btn2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Magic Btn"/>
+        <LinearLayout
+            android:id="@+id/magic_layout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/magic_btn3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Magic Btn"/>
+        <LinearLayout
+            android:id="@+id/magic_layout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</ScrollView>

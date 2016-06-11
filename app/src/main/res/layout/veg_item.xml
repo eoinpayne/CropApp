@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/RelativeLayout1"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/colorPrimary"
+                android:id="@+id/RelativeLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" android:background="@color/vegItem"
 
 
     >
-
+    <!--android:backgroundTint="#aaeeeeee"-->
+    <!--aaeeeeee-->
+    <!--when browned off for harvest dd795548-->
+    <!--558BC34A-->
+    <!--99ffeeff-->
     <TextView
         android:id="@+id/titleView"
         android:text="//"
@@ -50,11 +53,11 @@
         android:id="@+id/waterTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/textColor"
         android:text="Days since watered: "
         android:layout_alignBottom="@+id/titleView"
         android:layout_alignParentRight="true"
+        android:textSize="15sp"
 
         >
 
@@ -82,9 +85,10 @@
         android:layout_alignBaseline="@+id/statusCheckBox"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="17dp"
+        android:layout_marginTop="10dp"
         android:text="@string/done_string"
         android:textColor="@color/textColor"
+        android:textSize="15sp"
         >
     </TextView>
 
@@ -92,35 +96,34 @@
         android:id="@+id/statusCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="35dp"
         android:layout_toRightOf="@+id/StatusLabel"
         android:textColor="@color/textColor"
         >
     </CheckBox>
 
     <!--<TextView-->
-        <!--android:id="@+id/PriorityLabel"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignBaseline="@+id/statusCheckBox"-->
-        <!--android:layout_alignTop="@+id/StatusLabel"-->
-        <!--android:layout_toLeftOf="@+id/priorityView"-->
-        <!--android:text="@string/priority_string"-->
-        <!--android:textColor="@color/textColor"-->
-        <!--&gt;-->
+    <!--android:id="@+id/PriorityLabel"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignBaseline="@+id/statusCheckBox"-->
+    <!--android:layout_alignTop="@+id/StatusLabel"-->
+    <!--android:layout_toLeftOf="@+id/priorityView"-->
+    <!--android:text="@string/priority_string"-->
+    <!--android:textColor="@color/textColor"-->
+    <!--&gt;-->
     <!--</TextView>-->
 
     <!--<Spinner-->
-        <!--android:id="@+id/priorityView"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignBaseline="@+id/statusCheckBox"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_alignTop="@+id/StatusLabel"-->
-        <!--android:entries="@array/priority_list"-->
-        <!--android:textColor="@color/textColor"-->
-        <!--&gt;-->
+    <!--android:id="@+id/priorityView"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignBaseline="@+id/statusCheckBox"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_alignTop="@+id/StatusLabel"-->
+    <!--android:entries="@array/priority_list"-->
+    <!--android:textColor="@color/textColor"-->
+    <!--&gt;-->
     <!--</Spinner>-->
 
     <TextView
@@ -131,6 +134,8 @@
         android:layout_below="@+id/statusCheckBox"
         android:text="@string/date_string"
         android:textColor="@color/textColor"
+        android:textSize="16sp"
+        android:layout_marginTop="4dp"
         >
     </TextView>
     <TextView
@@ -147,11 +152,13 @@
         android:id="@+id/etaTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Days to harvest: "
-        android:layout_below="@+id/statusCheckBox"
+        android:layout_alignBottom="@+id/DateLabel"
         android:layout_toLeftOf="@+id/etaView"
         android:layout_centerHorizontal="true"
+        android:textColor="#111111"
+        android:layout_marginTop="5dp"
+        android:textSize="16sp"
         />
 
     <TextView
@@ -168,20 +175,20 @@
     </TextView>
 
     <!--<Button-->
-        <!--style="?android:attr/buttonStyleSmall"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="29dp"-->
-        <!---->
-        <!--android:layout_marginTop="5dp"-->
-        <!--android:layout_marginRight="15dp"-->
-        <!--android:text="Water"-->
-        <!--android:id="@+id/water_btn"-->
+    <!--style="?android:attr/buttonStyleSmall"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="29dp"-->
+    <!---->
+    <!--android:layout_marginTop="5dp"-->
+    <!--android:layout_marginRight="15dp"-->
+    <!--android:text="Water"-->
+    <!--android:id="@+id/water_btn"-->
 
-        <!--android:layout_below="@+id/waterTitle"-->
-        <!--android:layout_alignRight="@+id/waterTitle"-->
+    <!--android:layout_below="@+id/waterTitle"-->
+    <!--android:layout_alignRight="@+id/waterTitle"-->
 
-        <!--android:background="#6397ba"-->
-         <!--/>-->
+    <!--android:background="#6397ba"-->
+    <!--/>-->
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -203,12 +210,12 @@
 
 
     <!--<Spinner -->
-        <!--android:id="@+id/priorityView"-->
-        <!--android:layout_width="50dip"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignBaseline="@+id/statusCheckBox"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_alignTop="@+id/StatusLabel" >-->
-        <!--</Spinner>-->
+    <!--android:id="@+id/priorityView"-->
+    <!--android:layout_width="50dip"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignBaseline="@+id/statusCheckBox"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_alignTop="@+id/StatusLabel" >-->
+    <!--</Spinner>-->
 
 </RelativeLayout>

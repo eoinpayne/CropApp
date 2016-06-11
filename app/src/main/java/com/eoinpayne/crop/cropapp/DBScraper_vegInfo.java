@@ -1,10 +1,6 @@
 package com.eoinpayne.crop.cropapp;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.ContextWrapper;
-import android.os.AsyncTask;
-import android.view.View;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,7 +8,6 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -26,7 +21,6 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.Hashtable;
 
 /**
@@ -37,19 +31,24 @@ public class DBScraper_vegInfo implements Runnable {
 //    String scrapeVegName_url = "http://192.168.0.34/scrapeVegName.php";
 //    String scrapeAllVegInfo_url = "http://192.168.0.34/scrapeAllVegInfo.php";
 //
-    String scrapeVegName_url = "http://10.0.2.2/scrapeVegName.php";
-    String scrapeAllVegInfo_url = "http://10.0.2.2/scrapeAllVegInfo.php";
+    String scrapeVegName_url = "http://eoinpayne.dx.am/php/scrapeVegName.php";
+    String scrapeAllVegInfo_url = "http://eoinpayne.dx.am/php/scrapeAllVegInfo.php";
     String json;
     final public static String allVegInfo_file = "veg_info.txt";
+    final public static String VegInfo_file = "veg_info1.txt";
+
     final public static String vegNames_file = "veg_names.txt";
     final public static String daysToGrow_file = "days_to_grow.txt";
 
+
     Context ctx;
-    boolean deleted1;
-    boolean deleted2;
+    boolean deleted1, deleted2, deleted3;
     Hashtable daysToGrow_hash;
-    JSONObject myObject = new JSONObject();
-    JSONArray myArray = new JSONArray();
+
+    JSONObject DaysToGrow_jsonObject = new JSONObject();
+    JSONArray daysToGrow_jsonArray = new JSONArray();
+    JSONObject VegInfo_jsonObject = new JSONObject();
+    JSONArray VegInfo_jsonArray = new JSONArray();
 
     public DBScraper_vegInfo(Context current){
         ctx = current;
@@ -62,14 +61,9 @@ public class DBScraper_vegInfo implements Runnable {
 
 
         try {
-//            File dir = ctx.getFilesDir();
-//            File allVegInfo_file_delete = new File(dir, userVeg_file);
-//            File vegNames_file_delete = new File(dir, userVeg_file);
-//            deleted1 = allVegInfo_file_delete.delete();
-//            deleted2 = vegNames_file_delete.delete();
             deleted1 = ctx.deleteFile(allVegInfo_file);
             deleted2 = ctx.deleteFile(vegNames_file);
-            deleted2 = ctx.deleteFile(daysToGrow_file);
+            deleted3 = ctx.deleteFile(daysToGrow_file);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -121,26 +115,22 @@ public class DBScraper_vegInfo implements Runnable {
                 for (int i = 0; i < jsonArray.length(); i++)
                 {
                     JSONObject thisJO = jsonArray.getJSONObject(i);
-                    String allVegInfo = "VegID: " + thisJO.getString("vID") + ".   Veg Name: " + thisJO.getString("vegName")
-                            + ".   Preferred Soil: " + thisJO.getString("pSoilType") + thisJO.getString("pSoilType");
                     String vegName = thisJO.getString("vegName") + "\n";
-
                     String vegName1 = thisJO.getString("vegName");
                     int averageDaysToGrow = (thisJO.getInt("avgDaysToGrow"));
 
-////                    String averageDaysToGrow = null;
-//                    try {
-////                        averageDaysToGrow = Integer.parseInt(thisJO.getInt("avgDaysToGrow"));
-//
-//                    }catch (Exception e){
-//                        e.printStackTrace();
-//                    }
+//                    String allVegInfo = "VegID: " + thisJO.getString("vID") + ".   Veg Name: " + thisJO.getString("vegName")
+//                            + ".   Preferred Soil: " + thisJO.getString("pSoilType") + thisJO.getString("pSoilType");
 
+                    //todo ALLVEGINFO
+                    JSONObject jsonVegInfo = new JSONObject();
+                    jsonVegInfo.put(vegName1, jsonArray.getJSONObject(i)); //trying to put full json object in.
+                    VegInfo_jsonArray.put(jsonVegInfo);
+
+                    //todo DAYS TO GROW
                     JSONObject jsonDaysToGrow = new JSONObject();
                     jsonDaysToGrow.put(vegName1, averageDaysToGrow);
-                    myArray.put(jsonDaysToGrow);
-//                    myArray.add(vegName1, jsonDaysToGrow);
-
+                    daysToGrow_jsonArray.put(jsonDaysToGrow);
 
 
                     try {
@@ -166,9 +156,13 @@ public class DBScraper_vegInfo implements Runnable {
                     }
                 } //for int i =1
 
-                //toDo put the JsonArray of JsonObjects into a JsonObject
-                myObject.put("daysToGrow_collection", myArray);
-                String daysToGrow_collection = myObject.toString();
+                //toDo put the JsonArray of JsonObjects into a JsonObject -- VegInfo
+                VegInfo_jsonObject.put("vegInfo_collection", VegInfo_jsonArray);
+                String vegInfo_collection = VegInfo_jsonObject.toString();
+
+                //toDo put the JsonArray of JsonObjects into a JsonObject -- DaysToGrow
+                DaysToGrow_jsonObject.put("daysToGrow_collection", daysToGrow_jsonArray);
+                String daysToGrow_collection = DaysToGrow_jsonObject.toString();
 
                 //toDo write daysToGrow_collection to a file, like the vegName file.
 
@@ -177,6 +171,16 @@ public class DBScraper_vegInfo implements Runnable {
                     fos_daysToGrow = ctx.openFileOutput(daysToGrow_file, ctx.MODE_APPEND);
                     fos_daysToGrow.write(daysToGrow_collection.getBytes());
                     fos_daysToGrow.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                FileOutputStream fos_vegInfo = null;
+                try {
+                    fos_vegInfo = ctx.openFileOutput(VegInfo_file, ctx.MODE_APPEND);
+                    fos_vegInfo.write(vegInfo_collection.getBytes());
+                    fos_vegInfo.close();
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {

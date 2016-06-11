@@ -42,15 +42,14 @@ public class AddVeg_BackgroundTask extends AsyncTask<String,Void,String> {
     //user enetered correct details
 
     //define variables
-//    String addVegItem_url = "http://192.168.0.34/addVeg.php";
 
 //    String login_url = "http://147.252.139.83/login.php";
 
-    String addVegItem_url = "http://10.0.2.2/addVeg.php";
-    String deleteVegItem_url = "http://10.0.2.2/deleteVeg.php";
-    String deleteGarden_url = "http://10.0.2.2/deleteGarden.php";
-    String waterSingle_url = "http://10.0.2.2/waterSingle.php";
-    String waterAll_url = "http://10.0.2.2/waterAll.php";
+    String addVegItem_url       = "http://eoinpayne.dx.am/php/addVeg.php";
+    String deleteVegItem_url    = "http://eoinpayne.dx.am/php/deleteVeg.php";
+    String deleteGarden_url     = "http://eoinpayne.dx.am/php/deleteGarden.php";
+    String waterSingle_url      = "http://eoinpayne.dx.am/php/waterSingle.php";
+    String waterAll_url         = "http://eoinpayne.dx.am/php/waterAll.php";
 
 
     Context ctx;

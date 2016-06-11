@@ -42,6 +42,12 @@
             android:name=".AddVegActivity"
             android:theme="@style/AppTheme"
              />
+        <activity
+            android:name=".CatalogueActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".AccordianActivity"
+            android:theme="@style/AppTheme" />
         <!--<activity-->
             <!--android:name=".AddGardenActivity"-->
             <!--android:label="@string/title_activity_add_garden"-->

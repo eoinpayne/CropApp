@@ -9,24 +9,28 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.beardedhen.androidbootstrap.TypefaceProvider;
+
 public class RegisterActivity extends AppCompatActivity {
     //create edit text variable
     EditText Name, Email, mPassword, ConfirmPassword;
     //declare variable for register button
-    Button register_btn;
+    BootstrapButton register_btn;
     //declaring builder for alert box
     AlertDialog.Builder builder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TypefaceProvider.registerDefaultIconSets();
         setContentView(R.layout.activity_register);
         //initialise these varaibles
         Name = (EditText)findViewById(R.id.registration_name);
         Email = (EditText)findViewById(R.id.registration_email);
         mPassword = (EditText)findViewById(R.id.registration_password);
         ConfirmPassword = (EditText)findViewById(R.id.registration_confirm_password);
-        register_btn = (Button)findViewById(R.id.register_btn);
+        register_btn = (BootstrapButton)findViewById(R.id.register_btn);
         register_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)

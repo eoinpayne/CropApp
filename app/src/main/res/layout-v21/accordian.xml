@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/pots"
+    tools:context="com.eoinpayne.crop.cropapp.HomeActivity"
+    android:orientation="vertical"
+    >
+
+    <include
+        android:id="@+id/my_toolbar"
+        layout="@layout/app_bar"/>
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical" android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@drawable/pots"
+
+        >
+
+
+
+        <LinearLayout android:layout_marginTop="95dp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_gravity="center">
+
+
+            <!--aaffeeca-->
+            <!--99666666-->
+            <!--88cccccc-->
+            <!--80ffeeca-->
+            <!--bbffeeca-->
+            <!--name-->
+            <LinearLayout     android:background="#ddffeeca" android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_gravity="center">
+                <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content"  android:layout_gravity="center">
+
+                    <TextView android:id="@+id/acc_vegName_title"   android:text="Name"           android:textStyle="bold"                                   android:textSize="18sp"         android:padding="5dip"      android:layout_width="wrap_content" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+                    <TextView android:id="@+id/acc_vegName_content" android:text="name"   android:layout_alignParentRight="true"   android:padding="3dip"   android:textSize="21sp" android:layout_width="wrap_content" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+
+                </RelativeLayout>
+            </LinearLayout>
+
+            <!--growth rate-->
+            <LinearLayout android:background="#ddffeeca" android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_gravity="center">
+                <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content"  android:layout_gravity="center">
+
+                    <TextView android:id="@+id/acc_growthRate_title"   android:text="Typical Growth Rate"      android:textStyle="bold"                  android:textSize="18sp"                                   android:padding="5dip"     android:layout_width="wrap_content" android:layout_height="wrap_content"    android:layout_margin="2dip"  />
+                    <TextView android:id="@+id/acc_growthRate_content" android:text="growthRate"        android:layout_alignParentRight="true"          android:textSize="21sp" android:padding="5dip"      android:layout_width="wrap_content" android:layout_height="wrap_content"    android:layout_margin="2dip" />
+
+                </RelativeLayout>
+            </LinearLayout>
+
+            <!--Preffered Month To Plant-->
+            <LinearLayout android:background="#ddffeeca"
+                          android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_gravity="center">
+                <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content"  android:layout_gravity="center">
+
+                    <TextView android:id="@+id/acc_MonthToPlant_title"   android:text="Preferred Month To Plant"            android:textStyle="bold"                  android:textSize="18sp"                            android:padding="5dip"      android:layout_width="wrap_content" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+                    <TextView android:id="@+id/acc_MonthToPlant_content" android:text="MonthToPlant"  android:layout_alignParentRight="true"   android:padding="5dip" android:textSize="21sp"     android:layout_width="wrap_content" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+
+                </RelativeLayout>
+            </LinearLayout>
+
+            <!--Average Days To Grow-->
+            <LinearLayout android:background="#ddffeeca"
+                          android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_gravity="center">
+                <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content"  android:layout_gravity="center">
+
+                    <TextView android:id="@+id/acc_AvgDaysToGrow_title"   android:text="Average Days To Grow"        android:textStyle="bold"           android:textSize="18sp"                                        android:padding="5dip"     android:layout_width="wrap_content" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+                    <TextView android:id="@+id/acc_AvgDaysToGrow_content" android:text="AvgDaysToGrow"   android:layout_alignParentRight="true"         android:textSize="21sp"     android:padding="5dip"    android:layout_width="wrap_content" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+
+                </RelativeLayout>
+            </LinearLayout>
+
+            <!--Difficulty to Grow-->
+            <LinearLayout android:background="#ddffeeca" android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_gravity="center">
+                <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content"  android:layout_gravity="center">
+
+                    <TextView android:id="@+id/acc_Difficulty_title"   android:text="Difficulty to Grow"        android:textStyle="bold"               android:textSize="18sp"                                    android:padding="5dip"     android:layout_width="wrap_content" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+                    <TextView android:id="@+id/acc_Difficulty_content" android:text="Difficulty"   android:layout_alignParentRight="true"               android:textSize="21sp"  android:padding="5dip"     android:layout_width="wrap_content" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+
+                </RelativeLayout>
+            </LinearLayout>
+
+            <!--Average Height (feet)-->
+            <LinearLayout android:background="#ddffeeca" android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_gravity="center">
+                <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content"  android:layout_gravity="center">
+
+                    <TextView android:id="@+id/acc_AvgHeight_title"   android:text="Average Height (feet)"          android:textStyle="bold"                        android:textSize="18sp"                                  android:padding="5dip"    android:layout_width="wrap_content" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+                    <TextView android:id="@+id/acc_AvgHeight_content" android:text="AvgHeight"   android:layout_alignParentRight="true"   android:padding="5dip"    android:textSize="21sp"  android:layout_width="wrap_content" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+
+                </RelativeLayout>
+            </LinearLayout>
+
+            <!--Average Spread (feet)-->
+            <LinearLayout android:background="#ddffeeca" android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_gravity="center">
+                <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content"  android:layout_gravity="center">
+
+                    <TextView android:id="@+id/acc_AvgSpread_title"   android:text="Average Spread (feet)"           android:textStyle="bold"                      android:textSize="18sp"                          android:padding="5dip"    android:layout_width="wrap_content" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+                    <TextView android:id="@+id/acc_AvgSpread_content" android:text="AvgSpread"   android:layout_alignParentRight="true"   android:padding="5dip"   android:textSize="21sp"    android:layout_width="wrap_content" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+
+                </RelativeLayout>
+            </LinearLayout>
+
+
+            <!--Number per Sq Foot-->
+            <LinearLayout android:background="#ddffeeca" android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_gravity="center">
+                <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content"  android:layout_gravity="center">
+
+                    <TextView android:id="@+id/acc_perSqFt_title"   android:text="Number per Sq Foot"              android:textStyle="bold"                    android:textSize="18sp"                         android:padding="5dip"     android:layout_width="wrap_content" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+                    <TextView android:id="@+id/acc_perSqFt_content" android:text="perSqFt"   android:layout_alignParentRight="true"   android:padding="5dip"   android:textSize="21sp"   android:layout_width="wrap_content" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+
+                </RelativeLayout>
+            </LinearLayout>
+
+            <!--Days To water-->
+            <LinearLayout android:background="#ddffeeca" android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_gravity="center">
+                <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content"  android:layout_gravity="center">
+
+                    <TextView android:id="@+id/acc_WaterFrequency_title"   android:text="Water Frequency"           android:textStyle="bold"       android:textSize="18sp"                                         android:padding="5dip"     android:layout_width="wrap_content" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+                    <TextView android:id="@+id/acc_WaterFrequency_content" android:text="WaterFrequency"   android:layout_alignParentRight="true"  android:textSize="21sp"  android:padding="5dip"  android:layout_width="wrap_content" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+
+                </RelativeLayout>
+            </LinearLayout>
+
+
+
+
+
+
+            <!--Preferred Soil Type-->
+            <LinearLayout android:background="#ddffeeca" android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_gravity="center">
+                <TextView android:id="@+id/acc_soilType_title"   android:text="Preferred Soil Type"     android:padding="5dip"  android:textSize="18sp" android:background="#aaaaaaaa"  android:textStyle="bold"  android:layout_width="fill_parent" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+                <LinearLayout android:id="@+id/acc_panel_soilType" android:visibility="gone"  android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content">
+                    <TextView android:id="@+id/acc_soilType_content" android:text="soilType"          android:padding="5dip"     android:textSize="21sp"  android:layout_width="wrap_content" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <!--Light Requirements-->
+            <LinearLayout android:background="#ddffeeca" android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_gravity="center">
+                <TextView android:id="@+id/acc_lightReq_title"   android:text="Light Requirements"     android:padding="5dip"     android:textSize="18sp" android:background="#aaaaaaaa" android:textStyle="bold" android:layout_width="fill_parent" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+                <LinearLayout android:id="@+id/acc_panel_lightReq" android:visibility="gone"  android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content">
+                    <TextView android:id="@+id/acc_lightReq_content" android:text="lightReq"          android:padding="5dip"     android:textSize="21sp" android:layout_width="wrap_content" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!--How to Plant-->
+            <LinearLayout android:background="#ddffeeca" android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_gravity="center">
+                <TextView android:id="@+id/acc_howToPlant_title"   android:text="How to Plant"     android:padding="5dip"    android:textSize="18sp"  android:background="#aaaaaaaa" android:textStyle="bold"  android:layout_width="fill_parent" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+                <LinearLayout android:id="@+id/acc_panel_howToPlant" android:visibility="gone"  android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content">
+                    <TextView android:id="@+id/acc_howToPlant_content" android:text="howToPlant"          android:padding="5dip" android:textSize="21sp"      android:layout_width="wrap_content" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!--Care -->
+            <LinearLayout android:background="#ddffeeca" android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_gravity="center">
+                <TextView android:id="@+id/acc_Care_title"   android:text="Care"     android:padding="5dip" android:textSize="18sp"  android:background="#aaaaaaaa"   android:textStyle="bold"  android:layout_width="fill_parent" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+                <LinearLayout android:id="@+id/acc_panel_Care" android:visibility="gone"  android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content">
+                    <TextView android:id="@+id/acc_Care_content" android:text="Care"          android:padding="5dip"   android:textSize="21sp"   android:layout_width="wrap_content" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!--Pests -->
+            <LinearLayout android:background="#ddffeeca" android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_gravity="center">
+                <TextView android:id="@+id/acc_Pests_title"   android:text="Pests"     android:padding="5dip" android:textSize="18sp"  android:background="#aaaaaaaa" android:textStyle="bold"  android:layout_width="fill_parent" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+                <LinearLayout android:id="@+id/acc_panel_Pests" android:visibility="gone"  android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content">
+                    <TextView android:id="@+id/acc_Pests_content" android:text="Pests"          android:padding="5dip"  android:textSize="21sp"     android:layout_width="wrap_content" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!--Summary -->
+            <LinearLayout android:background="#ddffeeca" android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_gravity="center">
+                <TextView android:id="@+id/acc_Summary_title"   android:text="Summary"     android:padding="5dip" android:textSize="18sp" android:background="#aaaaaaaa" android:textStyle="bold"  android:layout_width="fill_parent" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+                <LinearLayout android:id="@+id/acc_panel_Summary" android:visibility="gone"  android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content">
+                    <TextView android:id="@+id/acc_Summary_content" android:text="Summary"          android:padding="5dip"    android:textSize="21sp"   android:layout_width="wrap_content" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!--Likes-->
+            <LinearLayout android:background="#ddffeeca" android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_gravity="center">
+                <TextView android:id="@+id/acc_Likes_title"   android:text="Likes"    android:textSize="18sp"  android:padding="5dip"  android:background="#aaaaaaaa"  android:textStyle="bold"   android:layout_width="fill_parent" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+                <LinearLayout android:id="@+id/acc_panel_likes" android:visibility="gone"  android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content">
+                    <TextView android:id="@+id/acc_Likes_content" android:text="Likes"  android:textSize="21sp"         android:padding="5dip"      android:layout_width="wrap_content" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!--Dislikes-->
+            <LinearLayout android:background="#ddffeeca" android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_gravity="center">
+                <TextView android:id="@+id/acc_Dislikes_title"   android:text="Dislikes"   android:textSize="18sp"   android:padding="5dip"  android:background="#aaaaaaaa"  android:textStyle="bold"   android:layout_width="fill_parent" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+                <LinearLayout android:id="@+id/acc_panel_Dislikes" android:visibility="gone"  android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content">
+                    <TextView android:id="@+id/acc_Dislikes_content" android:text="Dislikes"  android:textSize="21sp"         android:padding="5dip"     android:layout_width="wrap_content" android:layout_height="wrap_content"    android:layout_margin="2dip"    />
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <ListView android:background="#ddffeeca" android:id="@android:id/list" android:layout_width="fill_parent" android:visibility="gone"
+                      android:layout_height="340dip"  android:drawSelectorOnTop="false"  android:dividerHeight="0px"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

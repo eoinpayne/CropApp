@@ -36,6 +36,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.beardedhen.androidbootstrap.TypefaceProvider;
 import com.eoinpayne.crop.cropapp.VegItem.Affected;
 
 
@@ -81,12 +83,8 @@ public class AddVegActivity extends AppCompatActivity {  //appcompat  Activity?
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		TypefaceProvider.registerDefaultIconSets();
 		setContentView(R.layout.add_veg);
-
-		//add toolbar to activity
-		toolbar = (Toolbar)findViewById(R.id.my_toolbar);
-		setSupportActionBar(toolbar);
-
 		context = this;
 
 		//Retrieve bundle information passed from previous activity.
@@ -94,6 +92,29 @@ public class AddVegActivity extends AppCompatActivity {  //appcompat  Activity?
 		mGardenName = bundle.getString("gardenName");
 		mGardenID = bundle.getString("gardenID");
 //		mUserID = bundle.getString("userID");
+
+		//add toolbar to activity
+		toolbar = (Toolbar)findViewById(R.id.my_toolbar);
+		setSupportActionBar(toolbar);
+		getSupportActionBar().setDisplayShowTitleEnabled(false);
+		TextView mToolbarTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
+		mToolbarTitle.setText("Plant veg in " + mGardenName);
+
+		//set the Header in toolbar to be clickable and return user to gardens,
+		TextView mToolBarHeader = (TextView) toolbar.findViewById(R.id.toolbar_header);
+		mToolBarHeader.setOnClickListener(new OnClickListener() {
+			@Override  //clicking title brings user back home.
+			public void onClick(View v) {
+				Intent intent = new Intent(AddVegActivity.this, HomeActivity.class);
+				Bundle extras = new Bundle();
+				extras.putInt("userID", HomeActivity.global_userID);
+				intent.putExtras(extras);
+				startActivity(intent);
+			}
+		});
+
+
+
 
 		vegSpinner = (Spinner) findViewById(R.id.chooseVegSpinner);
 		ArrayList<String> vegItems = retrieveStringArrayFromFile(DBScraper_vegInfo.vegNames_file, context);
@@ -108,7 +129,7 @@ public class AddVegActivity extends AppCompatActivity {  //appcompat  Activity?
 
 		// OnClickListener for the Date button, calls showDatePickerDialog() to show
 		// the Date dialog
-		final Button datePickerButton = (Button) findViewById(R.id.date_picker_button);
+		final BootstrapButton datePickerButton = (BootstrapButton) findViewById(R.id.date_picker_button);
 		datePickerButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -117,7 +138,7 @@ public class AddVegActivity extends AppCompatActivity {  //appcompat  Activity?
 		});
 
 		// OnClickListener for the Cancel Button,
-		final Button cancelButton = (Button) findViewById(R.id.cancelButton);
+		final BootstrapButton cancelButton = (BootstrapButton) findViewById(R.id.cancelButton);
 		cancelButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -139,7 +160,7 @@ public class AddVegActivity extends AppCompatActivity {  //appcompat  Activity?
 		});
 
 		//OnClickListener for the Reset Button
-		final Button resetButton = (Button) findViewById(R.id.resetButton);
+		final BootstrapButton resetButton = (BootstrapButton) findViewById(R.id.resetButton);
 		resetButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -156,7 +177,7 @@ public class AddVegActivity extends AppCompatActivity {  //appcompat  Activity?
 		// OnClickListener for the Submit Button
 		// Implement onClick().
 
-		final Button submitButton = (Button) findViewById(R.id.submitButton);
+		final BootstrapButton submitButton = (BootstrapButton) findViewById(R.id.submitButton);
 		submitButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -248,7 +269,8 @@ public class AddVegActivity extends AppCompatActivity {  //appcompat  Activity?
 		int res_id = item.getItemId();
 
 		if(res_id == R.id.browse_veg){
-			//todo display the browse catalogue activity?
+			//todo display the browse catalogue activity
+			HomeActivity.selectVegToBrowse(context);
 		}
 //		else if(res_id == R.id.plant_veg){
 //			//toDo launch plant veg

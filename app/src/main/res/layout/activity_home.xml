@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/login_tools"
     tools:context="com.eoinpayne.crop.cropapp.HomeActivity"
     android:orientation="vertical"
+
     >
 
     <include
@@ -45,11 +47,12 @@
 
     <!--android:layout_below="@id/my_toolbar"-->
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
+        android:layout_marginRight="95dp"
         >
         <!--<LinearLayout-->
             <!--android:layout_height="wrap_content"-->
@@ -88,12 +91,24 @@
         <!--</LinearLayout>-->
 
         <!--"-->
+        <com.beardedhen.androidbootstrap.BootstrapWell
 
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:backgroundTint="#aaffeeca"
+            app:bootstrapSize="xs"
+
+            >
+            <!--99666666-->
+            <!--88cccccc-->
+            <!--80ffeeca-->
+            <!--bbffeeca-->
         <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Hello world!!:"
-            android:textSize="30sp"
+            android:textSize="60sp"
             android:gravity="center"
             android:layout_marginTop="0dp"
             android:textStyle="bold"
@@ -102,6 +117,7 @@
 
             />
 
+        </com.beardedhen.androidbootstrap.BootstrapWell>
     </RelativeLayout>
 
 </LinearLayout>

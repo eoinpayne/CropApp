@@ -23,6 +23,7 @@
         <item name="android:windowActionBarOverlay">false</item>
         <!--<item name="android:background">@color/colorPrimary</item>-->
 
+
     </style>
 
     <style name="AppThemeB" parent="Theme.AppCompat.Light.NoActionBar">
@@ -30,7 +31,6 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:background">@color/colorPrimary</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
     </style>

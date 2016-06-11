@@ -18,6 +18,11 @@
     <color name="windowBackground">#8BC34A</color>
     <color name="navigationBarColor">#689F38</color>
 
+    <color name="harvested">#dd795548</color>
+    <color name="vegItem">#aaeeeeee</color>
+
+    <!--#aaeeeeee-->
+
 
 
 

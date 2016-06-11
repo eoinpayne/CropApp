@@ -11,11 +11,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.beardedhen.androidbootstrap.TypefaceProvider;
+
 public class LoginActivity extends AppCompatActivity {
 
 
     EditText Email, mPassword;
-    Button login_btn;
+    BootstrapButton login_btn;
     TextView signup_text;
     AlertDialog.Builder builder;
     HomeActivity.HomeBackgroundTask homeBackgroundTask;
@@ -24,12 +27,13 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TypefaceProvider.registerDefaultIconSets();
         setContentView(R.layout.activity_login);
 
         Email = (EditText) findViewById(R.id.email);
         mPassword = (EditText) findViewById(R.id.password);
 
-        login_btn = (Button)findViewById(R.id.login_btn);
+        login_btn = (BootstrapButton)findViewById(R.id.login_btn);
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)

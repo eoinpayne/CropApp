@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,6 +68,13 @@ public class HomeActivity extends AppCompatActivity {          //ListActivity {
         setContentView(R.layout.activity_home);
         toolbar = (Toolbar)findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        TextView mToolbarTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        mToolbarTitle.setText("Create or choose a gardens");
+
+//        getActionBar().setTitle("Your Gardens");
+//        getSupportActionBar().setTitle("Your Gardens");
         context = this;
 
         //displaying message we passed through with intent "message" in post activity of background task
@@ -219,7 +227,9 @@ public class HomeActivity extends AppCompatActivity {          //ListActivity {
         int res_id = item.getItemId();
 
         if(res_id == R.id.browse_veg){
-            //todo display the browse catalogue activity?
+            //todo launch veg chooser
+            selectVegToBrowse(context);
+
         }
         else if(res_id == R.id.create_garden){
             getGardenName();
@@ -233,7 +243,47 @@ public class HomeActivity extends AppCompatActivity {          //ListActivity {
 
 
 
+    public static void selectVegToBrowse(final Context ctx)
+    {
+        //Show spinner to select veg item and view details.
+        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+        builder.setTitle("Choose veg you wish to view.");
 
+//        Spinner vegSpinner = (Spinner) findViewById(R.id.chooseVegSpinner);
+        final Spinner vegSpinner = new Spinner(ctx);
+//        vegSpinner.setDropDownWidth();
+        ArrayList<String> vegItems = AddVegActivity.retrieveStringArrayFromFile(DBScraper_vegInfo.vegNames_file, ctx);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(ctx, R.layout.spinner_layout, R.id.txt,vegItems);
+        vegSpinner.setAdapter(adapter);
+
+//        final EditText input = new EditText(HomeActivity.this);
+//        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(vegSpinner);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                final String chosenVeg = vegSpinner.getSelectedItem().toString(); //vegSpinner
+//                Editable gardenName_input = input.getText();
+//                selectedVeg = gardenName_input.toString();
+                try {
+                    //todo launch intent
+                    Intent intent = new Intent(ctx, AccordianActivity.class );
+                    intent.putExtra("chosenVeg", chosenVeg);
+//                    Bundle extras = new Bundle();
+//                    extras.putString("chosenVeg", chosenVeg);
+//                    intent.putExtras(extras);
+                    ctx.startActivity(intent); //starts CatalogueActivity intent
+                }   catch (Exception e){  e.printStackTrace();   }
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+    } //close selectVegToBrowse
 
 
     public void getGardenName()
@@ -271,8 +321,9 @@ public class HomeActivity extends AppCompatActivity {          //ListActivity {
 //        String createGarden_URL = "http://192.168.0.34/createGarden.php";
 //        String displayGarden_URL = "http://192.168.0.34/displayGardens.php";
 
-        String createGarden_URL = "http://10.0.2.2/createGarden.php";
-        String displayGarden_URL = "http://10.0.2.2/displayGardens.php";
+//        String createGarden_URL = "http://10.0.2.2/createGarden.php";
+        String createGarden_URL = "http://eoinpayne.dx.am/php/createGarden.php";
+        String displayGarden_URL = "http://eoinpayne.dx.am/php/displayGardens.php";
         AlertDialog.Builder builder;  //we can initialise in onPreExecute method
         ProgressDialog progressDialog;
 

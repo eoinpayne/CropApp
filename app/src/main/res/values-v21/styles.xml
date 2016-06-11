@@ -9,8 +9,7 @@
         <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:colorAccent">@color/colorAccent</item>
         <!--<item name="android:background">@color/colorPrimary</item>-->
-
-        <!--<item name="android:windowBackground">#212121</item>-->
+        <!--<item name="android:background">@color/colorPrimary</item>-->
 
 
         <item name="windowActionBar">true</item>

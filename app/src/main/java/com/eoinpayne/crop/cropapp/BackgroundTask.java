@@ -47,9 +47,15 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
 //    String register_url = "http://147.252.139.83/register.php";
 //    String login_url = "http://147.252.139.83/login.php";
 
-    String register_url = "http://10.0.2.2/register.php"; //make global
-    String login_url = "http://10.0.2.2/login.php";
-    String addVegItem_url = "http://10.0.2.2/addVeg.php";
+    String register_url = "http://eoinpayne.dx.am/php/register.php";
+//    String register_url = "http://83.125.22.215/php/register.php";
+
+
+//    83.125.22.215//make global
+//    String login_url = "http://10.0.2.2/login.php";
+    String login_url = "http://eoinpayne.dx.am/php/login.php";
+//
+    String addVegItem_url = "http://eoinpayne.dx.am/php/addVeg.php";
 
 
     Context ctx;
@@ -342,3 +348,4 @@ public class BackgroundTask extends AsyncTask<String,Void,String>{
     }
 
 }
+

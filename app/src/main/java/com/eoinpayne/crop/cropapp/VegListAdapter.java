@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,10 +29,20 @@ import com.eoinpayne.crop.cropapp.VegItem.Status;
 
 public class VegListAdapter extends BaseAdapter {
 	ArrayAdapter myAdapter;
+
+
+
 	// List of vegItems
 	private final ArrayList<VegItem> mItems = new ArrayList<VegItem>();
 	private final Context mContext;
 	private static final String TAG = "Lab-UserInterface";
+
+	private View mItemLayout;
+
+	public View getmItemLayout() {
+		return this.mItemLayout;
+	}
+
 
 	public VegListAdapter(Context context) {
 		mContext = context;
@@ -50,6 +61,9 @@ public class VegListAdapter extends BaseAdapter {
 		notifyDataSetChanged();
 	}
 
+	public ArrayList<VegItem> getmItems() {
+		return this.mItems;
+	}
 	// Returns the number of vegItems
 	@Override
 	public int getCount() {
@@ -107,6 +121,7 @@ public class VegListAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				Toast.makeText(mContext,"WATERED SINGLE!!", Toast.LENGTH_LONG).show();
+
 				vegItem.setLastWatered(GetCurrentDate());
 
 				//ToDo persist to DB
@@ -125,6 +140,7 @@ public class VegListAdapter extends BaseAdapter {
 		checkColour(vegItem, item_layout);
 		checkWater(vegItem, waterCountView);
 		calcDaysToHarvest(vegItem, daysToHarvestView);
+		//todo: pass in daystowater view. repeat daystoharevest.. (if statement in method?)
 //		changeTextColour(vegItem, titleView);
 
 
@@ -138,10 +154,10 @@ public class VegListAdapter extends BaseAdapter {
 				//ToDO: EXTRA WORK 1 - cyan/magenta
 				if (isChecked) {
 					vegItem.setStatus(Status.DONE);
-					item_layout.setBackgroundResource(R.color.colorPrimaryDark);
+					item_layout.setBackgroundResource(R.color.harvested);
 				} else {
 					vegItem.setStatus(Status.NOTDONE);
-					item_layout.setBackgroundResource(R.color.colorPrimary);
+					item_layout.setBackgroundResource(R.color.vegItem);
 				}
 			}
 		});
@@ -192,6 +208,7 @@ public class VegListAdapter extends BaseAdapter {
 		});
 
 		// TODO -  Return the View you created XX
+		mItemLayout = item_layout;
 		return item_layout;
 
 	} ////////////////////////////////////closes getView()
@@ -257,9 +274,9 @@ public class VegListAdapter extends BaseAdapter {
 	//ToDO: EXTRA WORK 1 - cyan/magenta
 	public void checkColour(VegItem vegItem, View item_layout ){
 		if (vegItem.getStatus().equals(Status.DONE)){
-			item_layout.setBackgroundResource(R.color.colorPrimaryDark);
+			item_layout.setBackgroundResource(R.color.harvested);
 		} else {
-			item_layout.setBackgroundResource(R.color.colorPrimary);
+			item_layout.setBackgroundResource(R.color.vegItem);
 		}
 	} //closes check colour
 
@@ -267,6 +284,8 @@ public class VegListAdapter extends BaseAdapter {
 
 
 //	//ToDo: EXTRA WORK 2 - Modify textcolor
+	//ToDo set each veg item with corresponding "daysToWater"
+	//ToDo: set a warning boolean to bepicked up on entry
 //	public void changeTextColour(VegItem vegItem, TextView titleView ){ //View item_layout
 //		Date now = new Date(System.currentTimeMillis());
 //		Date dateOfItem = vegItem.getDate();

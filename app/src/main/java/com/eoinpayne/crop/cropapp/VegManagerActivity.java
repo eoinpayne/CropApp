@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -17,8 +18,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -38,6 +41,7 @@ import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -56,12 +60,13 @@ public class VegManagerActivity extends AppCompatActivity {
 	// Add a vegItem Request Code
 	private static final int ADD_VEG_ITEM_REQUEST = 0;  //request code? is this always 0?
 	private static final String FILE_NAME = "VegManagerActivityData1.txt";
-	private static final String TAG = "Lab-UserInterface";
+	private static final String TAG = "Crop-App";
 
 	// IDs for menu items
 	private static final int MENU_DELETE = Menu.FIRST;
 	private static final int MENU_DUMP = Menu.FIRST + 1;
 
+	Context context;
 	VegListAdapter mAdapter;
 	private String gardenName;
 	private String gardenID;
@@ -74,6 +79,7 @@ public class VegManagerActivity extends AppCompatActivity {
 		toolbar = (Toolbar)findViewById(R.id.my_toolbar);
 		setSupportActionBar(toolbar);
 
+		context = this;
 		myListView = (ListView) findViewById(R.id.myListView);
 
 		// Create a new VegListAdapter for this ListActivity's ListView
@@ -83,6 +89,26 @@ public class VegManagerActivity extends AppCompatActivity {
 		gardenName = bundle.getString("gardenName");
 		gardenID = bundle.getString("gardenID");
 		userID = bundle.getString("userID");
+
+		getSupportActionBar().setDisplayShowTitleEnabled(false);
+		TextView mToolbarTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
+		mToolbarTitle.setText("Garden: " + gardenName);
+
+		//set the Header in toolbar to be clickable and return user to gardens,
+		TextView mToolBarHeader = (TextView) toolbar.findViewById(R.id.toolbar_header);
+		mToolBarHeader.setOnClickListener(new OnClickListener() {
+			@Override  //clicking title brings user back home.
+			public void onClick(View v) {
+				Intent intent = new Intent(VegManagerActivity.this, HomeActivity.class);
+				Bundle extras = new Bundle();
+				extras.putInt("userID", HomeActivity.global_userID);
+				intent.putExtras(extras);
+				startActivity(intent);
+			}
+		});
+
+//		getActionBar().setTitle(gardenName);
+//		getSupportActionBar().setTitle(gardenName);
 
 
 		//Veg EXTRA 5 - TABS
@@ -144,7 +170,8 @@ public class VegManagerActivity extends AppCompatActivity {
 		int res_id = item.getItemId();
 
 		if(res_id == R.id.browse_veg){
-			//todo display the browse catalogue activity?
+			//todo display the browse catalogue activity
+			HomeActivity.selectVegToBrowse(VegManagerActivity.this);
 		}
 		else if(res_id == R.id.plant_veg){
 			//toDo launch plant veg
@@ -158,6 +185,27 @@ public class VegManagerActivity extends AppCompatActivity {
 			//todo persist data and finish?
 			startActivity(addVeg_intent);
 		}
+		else if(res_id == R.id.water_all){
+			//toDo water all items in the list
+			ArrayList<VegItem> vegListItems = mAdapter.getmItems();
+			View mItemLayout = mAdapter.getmItemLayout();
+			Date now = VegListAdapter.GetCurrentDate();
+			for (VegItem thisVegItem : vegListItems) {
+				thisVegItem.setLastWatered(now);
+				try {			//ToDo persist to DB
+					AddVeg_BackgroundTask waterSingle_backgroundTask = new AddVeg_BackgroundTask(context);
+					waterSingle_backgroundTask.execute("waterSingle", thisVegItem.getGardenVegID(), now.toString());
+				}catch (Exception e){
+					e.printStackTrace();
+				}
+			}
+			mAdapter.notifyDataSetChanged();
+			Toast.makeText(context,"WATERED ALL!!", Toast.LENGTH_LONG).show();
+		}
+
+
+
+
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -369,7 +417,7 @@ public class VegManagerActivity extends AppCompatActivity {
 //        String createGarden_URL = "http://192.168.0.34/createGarden.php";
 //        String displayGarden_URL = "http://192.168.0.34/displayGardens.php";
 
-		String displayVeg_URL = "http://10.0.2.2/displayVeg.php";
+		String displayVeg_URL = "http://eoinpayne.dx.am/php/displayVeg.php";
 		AlertDialog.Builder builder;  //we can initialise in onPreExecute method
 		ProgressDialog progressDialog;
 

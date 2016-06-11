@@ -26,7 +26,7 @@ import java.net.URLEncoder;
 //TODO Upon logging in, finds all vegetables planted by a specified user, writes to a file.
 public class DBScraper_userVeg implements Runnable {
 //    public static String scrapeuserVeg_url = "http://192.168.0.34/scrapeUserVeg.php";
-    public static String scrapeuserVeg_url = "http://10.0.2.2/scrapeUserVeg.php";
+    public static String scrapeuserVeg_url = "http://eoinpayne.dx.am/php/scrapeUserVeg.php";
     String json;
     Context ctx;
     boolean deleted1;

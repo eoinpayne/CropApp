@@ -1,34 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    android:orientation="vertical"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:background="@drawable/login_can_minmin"
+              android:orientation="vertical"
 
-    tools:context="com.eoinpayne.crop.cropapp.LoginActivity">
+              tools:context="com.eoinpayne.crop.cropapp.LoginActivity">
 
     <!-- application name header-->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textColor="@color/textColor"
-        android:textSize="30dp"
-        android:gravity="center"
-        android:layout_marginTop="20dp"
-        android:textStyle="bold"
 
-        />
+
+    <com.beardedhen.androidbootstrap.BootstrapWell
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:backgroundTint="#99ffeeff"
+        app:bootstrapSize="xs"
+
+    >
+        <!--<TextView-->
+            <!--android:id="@+id/appname"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/app_name"-->
+            <!--android:textColor="@color/textColor"-->
+            <!--android:textSize="30dp"-->
+            <!--android:gravity="center"-->
+            <!--android:layout_marginTop="20dp"-->
+            <!--android:textStyle="bold"-->
+
+            <!--/>-->
     <RelativeLayout
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp">
 
+        <TextView
+            android:id="@+id/appname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textColor="@color/textColor"
+            android:textSize="30dp"
+            android:gravity="center"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold" />
+
          <!-- Email Field-->
         <TextView
+            android:layout_below="@+id/appname"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/prompt_email"
@@ -40,6 +70,7 @@
 
             />
         <EditText
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tx1"
@@ -72,39 +103,78 @@
             android:textColor="@color/textColor"
 
             />
-        <Button
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/login_btn"
+            android:layout_below="@id/password"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/login_btn_lbl"
+            app:roundedCorners="true"
+            app:buttonMode="regular"
             android:textStyle="bold"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/btn_selecter"
-            android:textColor="@color/textColor"
-            style="?android:textAppearanceSmall"
-            android:layout_below="@id/password"
-            android:id="@+id/login_btn"
+            app:bootstrapSize="lg"
+            app:bootstrapBrand="primary"
+
             />
+
+
+        <!--<Button-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/login_btn_lbl"-->
+            <!--android:textStyle="bold"-->
+            <!--android:layout_marginTop="5dp"-->
+            <!--android:background="@drawable/btn_selecter"-->
+            <!--android:textColor="@color/textColor"-->
+            <!--style="?android:textAppearanceSmall"-->
+            <!--android:layout_below="@id/password"-->
+            <!--android:id="@+id/login_btn"-->
+            <!--/>-->
     </RelativeLayout>
+
+    </com.beardedhen.androidbootstrap.BootstrapWell>
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="53dp"
+        android:layout_gravity="center_horizontal"
+
         >
+        <com.beardedhen.androidbootstrap.BootstrapWell
 
-        <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/signup_text"
-            android:textColor="@color/textColor"
-            android:textSize="18dp"
-            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            app:bootstrapSize="md"
             android:layout_alignParentBottom="true"
-            android:id="@+id/sign_up"
+            android:backgroundTint="#aaeeffee"
 
-            />
+
+            >
+            <!--99666666-->
+            <!--88cccccc-->
+            <!--#FFFECA11-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="@string/signup_text"
+                android:textColor="@color/textColor"
+                android:textSize="20dp"
+                android:gravity="center"
+                android:layout_alignParentBottom="true"
+                android:id="@+id/sign_up"
+
+                />
+        </com.beardedhen.androidbootstrap.BootstrapWell>
+
     </RelativeLayout>
+
+
 
 
 </LinearLayout>

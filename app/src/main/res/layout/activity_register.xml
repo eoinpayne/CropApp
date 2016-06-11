@@ -1,33 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/colorPrimary"
-    tools:context="com.eoinpayne.crop.cropapp.RegisterActivity">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:background="@drawable/gardening"
+              tools:context="com.eoinpayne.crop.cropapp.RegisterActivity">
 
-    <TextView
+
+    <com.beardedhen.androidbootstrap.BootstrapWell
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textColor="@color/textColor"
-        android:textSize="30dp"
-        android:gravity="center"
-        android:layout_marginTop="30dp"
-        android:textStyle="bold"
-        />
+        android:layout_gravity="center"
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="35dp"
+        android:backgroundTint="#bbffeeca"
+        app:bootstrapSize="xs"
 
-    <RelativeLayout
+
+        >
+        <!--99666666-->
+        <!--88cccccc-->
+        <!--80ffeeca-->
+        <!--bbffeeca-->
+        <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         >
+            <TextView
+                android:id="@+id/appname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:textColor="@color/textColor"
+                android:textSize="30dp"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
+                />
 
         <!-- register name field -->
         <TextView
+            android:layout_below="@+id/appname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/prompt_name"
@@ -48,7 +67,7 @@
 
         <!-- register email field -->
         <TextView
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:layout_below="@+id/registration_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -72,7 +91,7 @@
 
         <!-- register password field -->
         <TextView
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:layout_below="@+id/registration_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -95,7 +114,7 @@
 
         <!-- confirm password field -->
         <TextView
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:layout_below="@+id/registration_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -118,21 +137,36 @@
 
 
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <!--<Button-->
+            <!--android:id="@+id/register_btn"-->
+            <!--android:layout_below="@id/registration_confirm_password"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/register_btn_lbl"-->
+            <!--android:textStyle="bold"-->
+            <!--style="?android:textAppearanceSmall"-->
+            <!--android:layout_marginTop="25dp"-->
+            <!--android:background="@drawable/btn_selecter"-->
+            <!--android:textColor="@color/textColor"-->
+            <!--/>-->
+
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:id="@+id/register_btn"
+                android:layout_below="@id/registration_confirm_password"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
             android:text="@string/register_btn_lbl"
-            android:textStyle="bold"
-            style="?android:textAppearanceSmall"
-            android:layout_below="@id/registration_confirm_password"
-            android:layout_marginTop="25dp"
-            android:id="@+id/register_btn"
-            android:background="@drawable/btn_selecter"
-            android:textColor="@color/textColor"
-            />
+                app:roundedCorners="true"
+                app:buttonMode="regular"
+                android:textStyle="bold"
+                app:bootstrapSize="lg"
+                app:bootstrapBrand="primary"
+
+                />
 
 
 
     </RelativeLayout>
-
+    </com.beardedhen.androidbootstrap.BootstrapWell>
 </LinearLayout>
